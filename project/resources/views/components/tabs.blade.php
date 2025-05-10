@@ -6,11 +6,11 @@
         const savedposts = document.getElementById('saved-posts');
 
         function switchTab(activeTab, inactiveTab, activeContent, inactiveContent) {
-            activeTab.classList.add('border-red-600', 'text-red-600');
+            activeTab.classList.add('border-sky-600', 'text-sky-600');
             activeTab.classList.remove('border-transparent', 'text-gray-600');
 
             inactiveTab.classList.add('border-transparent', 'text-gray-600');
-            inactiveTab.classList.remove('border-red-600', 'text-red-600');
+            inactiveTab.classList.remove('border-sky-600', 'text-sky-600');
 
             activeContent.classList.remove('hidden');
             inactiveContent.classList.add('hidden');

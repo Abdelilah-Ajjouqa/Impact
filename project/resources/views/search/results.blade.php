@@ -3,7 +3,7 @@
 @section('title', 'Search Results for "' . $query . '"')
 
 @section('content')
-    <div class="container mx-auto px-4 py-8 mt-16">
+    <div class="container mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold mb-6">Search results for "{{ $query }}"</h1>
         
         @if($posts->isEmpty())

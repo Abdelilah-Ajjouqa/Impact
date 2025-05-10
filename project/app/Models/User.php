@@ -71,4 +71,9 @@ class User extends Authenticatable
     public function savedPosts(){
         return $this->hasMany(SavedPost::class);
     }
+    
+    public function albums()
+    {
+        return $this->hasMany(Album::class);
+    }
 }

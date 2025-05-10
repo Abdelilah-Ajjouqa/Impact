@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comments;
 use App\Models\Posts;
 use App\Models\User;
+use App\Models\Activity;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,8 @@ class AdminController extends Controller
                 return redirect()->back()->with('error', 'You cannot access this page.');
             }
 
-            return view('admin.dashboard', compact('user'));
+            $activities = Activity::with('user')->latest()->take(10)->get();
+            return view('admin.dashboard', compact('user', 'activities'));
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

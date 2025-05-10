@@ -8,6 +8,8 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Exception;
+use App\Models\Activity;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -55,6 +57,14 @@ class PostController extends Controller
                 }
             }
 
+            Activity::create([
+                'user_id' => $request->user()->id,
+                'action' => 'created',
+                'item_type' => 'post',
+                'item_id' => $post->id,
+                'description' => 'New post: "' . $post->title . '"',
+            ]);
+
             return redirect()
                 ->route('posts.index')
                 ->with('success', 'Post created successfully!');
@@ -68,7 +78,18 @@ class PostController extends Controller
     public function show(string $id)
     {
         $post = Posts::with('mediaContent', 'tags')->findOrFail($id);
-        return view('posts.show', compact('post'));
+
+        $relatedPosts = Posts::whereHas('tags', function ($query) use ($post) {
+            $query->whereIn('tags.id', $post->tags->pluck('id'));
+        })
+            ->where('id', '!=', $post->id)
+            ->where('status', '!=', Posts::is_archived)
+            ->with(['mediaContent', 'user', 'tags'])
+            ->inRandomOrder()
+            // ->limit(6)
+            ->get();
+
+        return view('posts.show', compact('post', 'relatedPosts'));
     }
 
     public function edit(string $id)
@@ -129,6 +150,15 @@ class PostController extends Controller
             $media->delete();
         }
         $post->delete();
+
+        // Log activity
+        Activity::create([
+            'user_id' => Auth::id(),
+            'action' => 'deleted',
+            'item_type' => 'post',
+            'item_id' => $post->id,
+            'description' => 'Post: "' . $post->title . '"',
+        ]);
 
         return redirect()
             ->route('posts.index')

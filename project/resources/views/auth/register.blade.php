@@ -3,10 +3,10 @@
 @section('title', 'Register')
 
 @section('content')
-    <div class="flex justify-center items-center min-h-[80vh] py-8">
+    <div class="flex justify-center items-center min-h-[80vh] py-5">
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-            <div class="text-center mb-8">
-                <i class="fab fa-pinterest text-black text-5xl mb-4"></i>
+            <div class="text-center">
+                <img src="/butterfly-logo.png" alt="Logo" class="mx-auto mb-4" style="height: 7rem; width: auto;" />
                 <h1 class="text-2xl font-bold">Create your account</h1>
                 <p class="text-gray-600">Find new ideas to try</p>
             </div>

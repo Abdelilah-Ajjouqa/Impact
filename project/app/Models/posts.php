@@ -46,4 +46,10 @@ class Posts extends Model
     {
         return $this->hasMany(SavedPost::class, 'post_id');
     }
+
+    public function albums()
+    {
+        return $this->belongsToMany(Album::class, 'album_post', 'post_id', 'album_id')
+            ->withTimestamps();
+    }
 }

@@ -42,7 +42,7 @@
                             <div class="mb-4">
                                 <label for="title" class="block text-gray-700 font-medium mb-2">Title</label>
                                 <input type="text" id="title" name="title" value="{{ old('title') }}"
-                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('title') border-red-500 @enderror"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 @error('title') border-red-500 @enderror"
                                     required>
                                 @error('title')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -52,7 +52,7 @@
                             <div class="mb-4">
                                 <label for="description" class="block text-gray-700 font-medium mb-2">Description</label>
                                 <textarea id="description" name="description" rows="4"
-                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
                                 @error('description')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
@@ -63,7 +63,7 @@
                                     separated)</label>
                                 <input type="text" id="tags" name="tags" value="{{ old('tags') }}"
                                     placeholder="nature travel photography"
-                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('tags') border-red-500 @enderror">
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 @error('tags') border-red-500 @enderror">
                                 @error('tags')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
@@ -75,7 +75,7 @@
                                     Cancel
                                 </a>
                                 <button type="submit"
-                                    class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-full">
+                                    class="bg-sky-500 hover:bg-sky-600 text-white font-medium py-2 px-4 rounded-full">
                                     Create post
                                 </button>
                             </div>

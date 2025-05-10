@@ -7,6 +7,7 @@ use App\Models\Posts;
 use App\Http\Requests\CommentRequest;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Activity;
 
 class CommentController extends Controller
 {
@@ -33,10 +34,19 @@ class CommentController extends Controller
         try {
             Posts::findOrFail($post_id);
 
-            Comments::create([
+            $comment = Comments::create([
                 'content' => $request->validated()['content'],
                 'user_id' => Auth::id(),
                 'post_id' => $post_id
+            ]);
+
+            // Log activity
+            Activity::create([
+                'user_id' => Auth::id(),
+                'action' => 'commented',
+                'item_type' => 'comment',
+                'item_id' => $comment->id,
+                'description' => 'On post: "' . Posts::find($post_id)?->title . '"',
             ]);
 
             return redirect()

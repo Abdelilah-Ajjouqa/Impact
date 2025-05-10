@@ -6,7 +6,7 @@
 <div class="flex justify-center items-center min-h-[80vh]">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <div class="text-center mb-8">
-            <i class="fab fa-pinterest text-black text-5xl mb-4"></i>
+            <img src="/butterfly-logo.png" alt="Logo" class="mx-auto mb-4" style="height: 5rem; width: auto;" />
             <h1 class="text-2xl font-bold">Welcome to PinClone</h1>
             <p class="text-gray-600">Find new ideas to try</p>
         </div>

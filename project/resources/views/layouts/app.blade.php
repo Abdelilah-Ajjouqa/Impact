@@ -17,36 +17,21 @@
 <body class="layout-container">
     @include('layouts.header')
 
+    <!-- Mini Popup Notification -->
+    @if (session('success'))
+        <x-notification type="success" :message="session('success')" />
+    @endif
+    @if (session('error'))
+        <x-notification type="error" :message="session('error')" />
+    @endif
+    <!-- End Mini Popup Notification -->
+
     <!-- Main Content -->
     <main class="container mx-auto px-4 pt-20 pb-10">
         @yield('content')
     </main>
 
     @include('layouts.footer')
-
-    <script>
-        @if (session('success'))
-            Swal.fire({
-                title: 'Success!',
-                text: '{{ session('success') }}',
-                icon: 'success',
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });
-        @endif
-
-        @if (session('error'))
-            Swal.fire({
-                title: 'Error!',
-                text: '{{ session('error') }}',
-                icon: 'error',
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });
-        @endif
-    </script>
 
     @yield('scripts')
 </body>
