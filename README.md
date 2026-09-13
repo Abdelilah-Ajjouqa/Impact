@@ -1,211 +1,140 @@
-Cahier des Charges – Projet Fil Rouge
-1. Présentation du Projet
-1.1 Présentation de l’Entreprise
-Fil Rouge est une initiative visant à créer une plateforme web inspirée de Pinterest, permettant aux utilisateurs de partager et de découvrir des contenus multimédias tels que des photos et des vidéos. Le projet est développé dans le cadre d'un exercice académique ou d'un portfolio personnel, démontrant les compétences en développement web full-stack.
-1.2 Nom du Site Web
-Fil Rouge
-1.3 Public Cible
-Utilisateurs passionnés de photographie et de vidéographie souhaitant partager leurs œuvres.
+# Fil Rouge
 
+## Sommaire
 
-Curieux et amateurs de contenu visuel à la recherche d'inspiration.
+- [Présentation du projet](#présentation-du-projet)
+- [Objectifs](#objectifs)
+- [Description graphique et ergonomique](#description-graphique-et-ergonomique)
+- [Fonctionnalités](#fonctionnalités)
+- [Choix technologiques](#choix-technologiques)
+- [Compatibilité](#compatibilité)
+- [Sécurité et conformité](#sécurité-et-conformité)
+- [Conclusion](#conclusion)
 
+## Présentation du projet
 
-Développeurs et designers intéressés par les projets open-source et les démonstrations de compétences techniques.
+### Présentation de l'entreprise
 
+Impact est une plateforme web inspirée de Pinterest, permettant de partager et de découvrir des contenus multimédias tels que des photos et des vidéos. Le projet est développé dans le cadre d'un exercice académique ou d'un portfolio personnel.
 
-1.4 Technologies Utilisées
-Frontend : HTML5, CSS3, Tailwind CSS, Blade (Laravel), JavaScript
+### Nom du site
 
+**Impact**
 
-Backend : PHP (Laravel Framework)
+### Public cible
 
+- Passionnés de photographie et de vidéographie souhaitant partager leurs œuvres.
+- Curieux et amateurs de contenu visuel à la recherche d'inspiration.
+- Développeurs et designers intéressés par les projets open source.
 
-Base de Données : MySQL
+### Technologies utilisées
 
+- **Frontend :** HTML5, CSS3, Tailwind CSS, Blade (Laravel) et JavaScript.
+- **Backend :** PHP avec le framework Laravel.
+- **Base de données :** MySQL.
 
-1.5 Périmètre du Projet
-Fonctionnalités principales : Publication, consultation, et interaction avec des contenus multimédias.
+### Périmètre du projet
 
+- Publication, consultation et interaction avec des contenus multimédias.
+- Design responsive adapté aux ordinateurs, tablettes et smartphones.
+- Interface conviviale favorisant une navigation intuitive.
 
-Design responsive : Adapté aux ordinateurs, tablettes et smartphones.
+## Objectifs
 
+- Offrir une plateforme intuitive pour le partage de photos et de vidéos.
+- Permettre aux utilisateurs de publier, consulter, commenter et aimer des contenus.
+- Assurer une gestion efficace des utilisateurs et des contenus via une interface d'administration.
+- Garantir la sécurité des données et des interactions sur la plateforme.
 
-Accessibilité : Interface conviviale pour une navigation intuitive.
+## Description graphique et ergonomique
 
+### Charte graphique
 
+- Design épuré et moderne mettant en valeur le contenu visuel.
+- Palette de couleurs neutres avec des accents vifs pour les éléments interactifs.
+- Typographie claire et lisible pour une meilleure expérience utilisateur.
 
-2. Objectifs du Site
-Offrir une plateforme intuitive pour le partage de photos et de vidéos.
+### Inspirations
 
+- **Pinterest :** disposition en grille des contenus.
+- **Unsplash :** mise en avant d'images de haute qualité.
+- **Instagram :** interactions sociales telles que les likes et les commentaires.
 
-Permettre aux utilisateurs de publier, consulter, commenter et aimer des contenus.
+### Logo
 
+- Icône représentant une épingle ou un appareil photo, symbolisant le partage de contenu visuel.
+- Typographie moderne reflétant la simplicité et l'élégance de la plateforme.
 
-Assurer une gestion efficace des utilisateurs et des contenus via une interface d'administration.
+## Fonctionnalités
 
+### Structure du site
 
-Garantir la sécurité des données et des interactions sur la plateforme.
+- **Accueil :** présentation des contenus récents et populaires.
+- **Galerie :** affichage en grille des photos et vidéos.
+- **Publication :** formulaire pour publier de nouveaux contenus.
+- **Profil utilisateur :** informations et contenus de l'utilisateur.
+- **Connexion / inscription :** accès au compte utilisateur.
+- **Administration :** gestion des utilisateurs et des contenus.
 
+### Fonctionnalités par rôle
 
+#### Utilisateurs
 
-3. Description Graphique & Ergonomique
-3.1 Charte Graphique
-Design épuré et moderne mettant en valeur le contenu visuel.
+- **Inscription et connexion :** création de compte et authentification sécurisée.
+- **Publication de contenus :** upload de photos ou vidéos avec titre et description.
+- **Consultation de la galerie :** navigation parmi les contenus publiés.
+- **Interactions sociales :** possibilité d'aimer et de commenter les contenus.
+- **Gestion du profil :** modification des informations personnelles et visualisation des contenus publiés.
 
+#### Administrateurs
 
-Palette de couleurs neutres avec des accents vifs pour les éléments interactifs.
+- **Gestion des utilisateurs :** visualisation, modification et suppression des comptes.
+- **Modération des contenus :** validation, édition ou suppression des publications.
+- **Gestion des commentaires :** surveillance et modération des interactions sociales.
+- **Tableau de bord :** statistiques sur l'utilisation de la plateforme et les contenus populaires.
 
+## Choix technologiques
 
-Typographie claire et lisible pour une meilleure expérience utilisateur.
+### Frontend
 
+- HTML5, CSS3 et Tailwind CSS pour la structure et le style.
+- Blade (Laravel) pour les templates dynamiques.
+- JavaScript pour les interactions côté client.
 
-3.2 Inspirations
-Pinterest : Pour la disposition en grille des contenus.
+### Backend
 
+- PHP avec le framework Laravel pour une architecture MVC robuste.
+- MySQL pour la gestion des données relationnelles.
 
-Unsplash : Pour la mise en avant des images de haute qualité.
+### Sécurité
 
+- Middleware Laravel pour la protection des routes.
+- Validation des formulaires côté serveur afin d'éviter les injections et les données invalides.
 
-Instagram : Pour les interactions sociales telles que les likes et les commentaires.
+## Compatibilité
 
+### Navigateurs compatibles
 
-3.3 Logo
-Icône représentant une épingle ou un appareil photo symbolisant le partage de contenu visuel.
+- Google Chrome
+- Mozilla Firefox
+- Safari
+- Microsoft Edge
 
+### Appareils
 
-Typographie moderne reflétant la simplicité et l'élégance de la plateforme.
+- Ordinateurs de bureau
+- Tablettes
+- Smartphones
 
+## Sécurité et conformité
 
+- **Authentification :** système de connexion sécurisé avec gestion des sessions.
+- **Autorisation :** contrôle d'accès basé sur les rôles utilisateur et administrateur.
+- **Protection des données :** chiffrement des mots de passe et sécurisation des données sensibles.
+- **Conformité :** respect des bonnes pratiques en matière de développement web sécurisé.
 
-4. Fonctionnalités
-4.1 Structure du Site (Plan du Site)
-Accueil – Présentation des contenus récents et populaires
- 
-Galerie – Affichage en grille des photos et vidéos
+## Conclusion
 
-
-Publication – Formulaire pour publier de nouveaux contenus
-
-
-Profil Utilisateur – Informations et contenus de l'utilisateur
-
-
-Connexion / Inscription – Accès au compte utilisateur
-
-
-Administration – Gestion des utilisateurs et des contenus
-
-
-4.2 Fonctionnalités par Rôle
-4.2.1 Utilisateurs
-Inscription & Connexion : Création de compte, authentification sécurisée.
-
-
-Publication de Contenus : Upload de photos/vidéos avec titre et description.
-
-
-Consultation de la Galerie : Navigation à travers les contenus publiés.
-
-
-Interactions Sociales : Aimer et commenter les contenus.
-
-
-Gestion du Profil : Modification des informations personnelles et visualisation des contenus publiés.
-
-
-4.2.2 Administrateurs
-Gestion des Utilisateurs : Visualisation, modification, et suppression des comptes utilisateurs.
-
-
-Modération des Contenus : Validation, édition, ou suppression des contenus publiés.
-
-
-Gestion des Commentaires : Surveillance et modération des interactions sociales.
-
-
-Tableau de Bord : Statistiques sur l'utilisation de la plateforme et les contenus populaires.
-
-
-
-5. Choix Technologiques
-Frontend :
-
-
-HTML5, CSS3, Tailwind CSS pour la structure et le style.
-
-
-Blade (Laravel) pour les templates dynamiques.
-
-
-JavaScript pour les interactions côté client.
-
-
-Backend :
-
-
-PHP avec le framework Laravel pour une architecture MVC robuste.
-
-
-MySQL pour la gestion des données relationnelles.
-
-
-Sécurité :
-
-
-Middleware Laravel pour la protection des routes.
-
-
-Validation des formulaires côté serveur pour éviter les injections et les données invalides.
-
-
-
-6. Compatibilité Navigateurs & Appareils
-Navigateurs Compatibles :
-
-
-Google Chrome
-
-
-Mozilla Firefox
-
-
-Safari
-
-
-Microsoft Edge
-
-
-Appareils :
-
-
-Ordinateurs de bureau
-
-
-Tablettes
-
-
-Smartphones
-
-
-
-7. Sécurité & Conformité
-Authentification : Système de connexion sécurisé avec gestion des sessions.
-
-
-Autorisation : Contrôle d'accès basé sur les rôles (utilisateur, administrateur).
-
-
-Protection des Données : Chiffrement des mots de passe et sécurisation des données sensibles.
-
-
-Conformité : Respect des bonnes pratiques en matière de développement web sécurisé.
-
-
-
-8. Conclusion
-Ce cahier des charges définit les spécifications fonctionnelles et techniques du projet Fil Rouge, une plateforme web dédiée au partage et à la découverte de contenus multimédias. En s'appuyant sur les technologies modernes et une architecture solide, le projet vise à offrir une expérience utilisateur fluide et sécurisée, tout en mettant en valeur les compétences en développement web full-stack.
-
-Souhaites-tu que je te fournisse ce document au format PDF ou Word pour une utilisation ultérieure ?
+Ce cahier des charges définit les spécifications fonctionnelles et techniques du projet Fil Rouge, une plateforme web dédiée au partage et à la découverte de contenus multimédias. En s'appuyant sur des technologies modernes et une architecture solide, le projet vise à offrir une expérience utilisateur fluide et sécurisée, tout en mettant en valeur les compétences en développement web full-stack.
 
 
