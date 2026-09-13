@@ -21,11 +21,15 @@ class PostRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isCreate = $this->isMethod('post');
+
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'media.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,mov|max:102400',
+            'media' => $isCreate ? 'required|array|min:1' : 'nullable|array',
+            'media.*' => 'file|mimes:jpeg,png,jpg,gif,mp4,mov,avi,mkv|max:20480',
             'tags' => 'nullable|string',
+            'status' => 'nullable|in:public,private,archived',
         ];
     }
 }

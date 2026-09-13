@@ -20,13 +20,13 @@ class AdminMiddleware
         if (!Auth::check()) {
             return redirect()
                 ->route('auth.login.form')
-                ->with('error', 'Ypu need to login first');
+                ->with('error', 'You need to log in first.');
         }
 
         if (!$request->user()->getRole($role)) {
             return redirect()
                 ->route('posts.index')
-                ->with('error', 'you don\t have access to this page');
+                ->with('error', 'You do not have access to this page.');
         }
 
         return $next($request);

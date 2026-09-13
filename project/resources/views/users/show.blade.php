@@ -28,6 +28,12 @@
                 <p>{{ $user->username }}</p>
             </span>
 
+            <div class="flex justify-center items-center space-x-4 text-sm text-gray-600 mt-2">
+                <span><strong class="text-gray-900" data-follower-count-for="{{ $user->id }}">{{ $user->followers_count ?? $user->followers()->count() }}</strong> followers</span>
+                <span>•</span>
+                <span><strong class="text-gray-900">{{ $user->following_count ?? $user->following()->count() }}</strong> following</span>
+            </div>
+
             <!-- User Actions -->
             <div class="flex justify-center mt-4 space-x-2">
                 @auth
@@ -37,8 +43,14 @@
                             <i class="fas fa-edit mr-1"></i> Edit Profile
                         </a>
                     @else
-                        <button class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-full">
-                            Follow
+                        @php
+                            $isFollowingProfile = Auth::user()->isFollowing($user->id);
+                        @endphp
+                        <button type="button"
+                            data-user-id="{{ $user->id }}"
+                            data-following="{{ $isFollowingProfile ? 'true' : 'false' }}"
+                            class="btn-follow font-medium py-2 px-6 rounded-full transition-colors duration-200 cursor-pointer {{ $isFollowingProfile ? 'bg-gray-100 hover:bg-gray-200 text-gray-800' : 'bg-red-600 hover:bg-red-700 text-white' }}">
+                            {{ $isFollowingProfile ? 'Following' : 'Follow' }}
                         </button>
                     @endif
                 @endauth
@@ -77,11 +89,11 @@
 
                                 @if ($isVideo)
                                     <video class="w-full object-cover" autoplay muted loop playsinline>
-                                        <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
+                                        <source src="{{ $media->url }}" type="{{ $media->type }}">
                                         Your browser does not support the video tag.
                                     </video>
                                 @else
-                                    <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $item->title }}"
+                                    <img src="{{ $media->url }}" alt="{{ $item->title }}"
                                         class="w-full object-cover">
                                 @endif
                             @else
@@ -128,11 +140,11 @@
 
                                 @if ($isVideo)
                                     <video class="w-full object-cover" autoplay muted loop playsinline>
-                                        <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
+                                        <source src="{{ $media->url }}" type="{{ $media->type }}">
                                         Your browser does not support the video tag.
                                     </video>
                                 @else
-                                    <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $savedPost->post->title }}"
+                                    <img src="{{ $media->url }}" alt="{{ $savedPost->post->title }}"
                                         class="w-full object-cover">
                                 @endif
                             @else

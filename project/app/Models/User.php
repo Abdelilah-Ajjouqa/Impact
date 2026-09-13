@@ -83,6 +83,28 @@ class User extends Authenticatable
         return $this->hasMany(Album::class);
     }
 
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id')->withTimestamps();
+    }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id')->withTimestamps();
+    }
+
+    public function isFollowing(int|User $user): bool
+    {
+        $userId = $user instanceof User ? $user->id : $user;
+        return $this->following()->where('following_id', $userId)->exists();
+    }
+
+    public function isFollowedBy(int|User $user): bool
+    {
+        $userId = $user instanceof User ? $user->id : $user;
+        return $this->followers()->where('follower_id', $userId)->exists();
+    }
+
     public function getAvatarUrlAttribute(): string
     {
         if (!$this->avatar) {

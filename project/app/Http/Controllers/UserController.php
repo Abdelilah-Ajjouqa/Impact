@@ -31,7 +31,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         try {
-            $user = User::findOrFail($id);
+            $user = User::withCount(['followers', 'following'])->findOrFail($id);
             $posts = Post::where('user_id', $id)
                 ->where(function ($query) {
                     $query->where('status', Post::STATUS_PUBLIC)

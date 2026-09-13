@@ -19,14 +19,14 @@ class UserStatusMiddleware
         if (!Auth::check()) {
             return redirect()
                 ->route('auth.login.form')
-                ->with('error', 'You need to login first');
+                ->with('error', 'You need to log in first.');
         }
 
         if (!$request->user()->is_active) {
             Auth::logout();
             return redirect()
                 ->route('auth.login.form')
-                ->with('error', 'Your account has been deactived');
+                ->with('error', 'Your account has been deactivated.');
         }
 
         return $next($request);

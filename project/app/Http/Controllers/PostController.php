@@ -86,7 +86,14 @@ class PostController extends Controller
 
     public function show(string $id)
     {
-        $post = Post::with(['mediaContent', 'tags', 'user', 'comments.user'])->findOrFail($id);
+        $post = Post::with([
+            'mediaContent',
+            'tags',
+            'user' => function ($query) {
+                $query->withCount('followers');
+            },
+            'comments.user'
+        ])->findOrFail($id);
         Gate::authorize('view', $post);
 
         $relatedPosts = Post::whereHas('tags', function ($query) use ($post) {

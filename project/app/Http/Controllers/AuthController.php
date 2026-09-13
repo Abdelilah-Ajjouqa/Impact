@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AuthRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(AuthRequest $request)
+    public function register(RegisterRequest $request)
     {
         try {
             $data = $request->validated();
@@ -43,11 +44,12 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(AuthRequest $request)
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->validated();
+        $credentials = $request->only('email', 'password');
+        $remember = $request->boolean('remember');
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
 
             if (!$user->is_active) {

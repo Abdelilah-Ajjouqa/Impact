@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SavedPostController;
 use App\Http\Controllers\SearchController;
@@ -32,6 +33,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 */
 Route::middleware(['auth', 'userStatus'])->prefix('users')->name('users.')->group(function () {
     // Route::get('/{id}', [UserController::class, 'show'])->name('show');
+    Route::post('/{id}/follow', [FollowController::class, 'toggle'])->name('follow');
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
     Route::post('/{id}', [UserController::class, 'update'])->name('update');
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
