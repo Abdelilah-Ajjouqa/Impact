@@ -59,3 +59,4 @@ test('guest cannot follow a user', function () {
 
     $response->assertStatus(401);
 });
+

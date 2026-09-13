@@ -119,10 +119,10 @@ class PostController extends Controller
 
     public function update(PostRequest $request, string $id)
     {
-        try {
-            $post = Post::findOrFail($id);
-            Gate::authorize('update', $post);
+        $post = Post::findOrFail($id);
+        Gate::authorize('update', $post);
 
+        try {
             $validate = $request->validated();
 
             if ($request->hasFile('media')) {
@@ -166,10 +166,10 @@ class PostController extends Controller
 
     public function destroy(string $id)
     {
-        try {
-            $post = Post::findOrFail($id);
-            Gate::authorize('delete', $post);
+        $post = Post::findOrFail($id);
+        Gate::authorize('delete', $post);
 
+        try {
             foreach ($post->mediaContent as $media) {
                 Storage::disk('public')->delete($media->path);
                 $media->delete();
@@ -206,16 +206,12 @@ class PostController extends Controller
             ->with('success', 'Media loaded successfully!');
     }
 
-    public function uploadMedia(Request $request, $id)
+    public function uploadMedia(Request $request, string $id)
     {
+        $post = Post::findOrFail($id);
+        Gate::authorize('update', $post);
+
         try {
-            $request->validate([
-                'media' => 'required|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi,mkv|max:10240',
-            ]);
-
-            $post = Post::findOrFail($id);
-            Gate::authorize('update', $post);
-
             if ($request->hasFile('media')) {
                 $filePath = $request->file('media')->store('media', 'public');
 

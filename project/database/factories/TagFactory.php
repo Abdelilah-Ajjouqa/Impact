@@ -19,3 +19,4 @@ class TagFactory extends Factory
         ];
     }
 }
+

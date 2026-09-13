@@ -37,3 +37,4 @@ class PostFactory extends Factory
         ]);
     }
 }
+

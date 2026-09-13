@@ -15,11 +15,12 @@ test('user can register with valid credentials', function () {
         'password_confirmation' => 'password123',
     ]);
 
-    $response->assertRedirect('/login');
+    $response->assertRedirect('/');
     $this->assertDatabaseHas('users', [
         'username' => 'janedoe',
         'email' => 'jane@example.com',
     ]);
+    $this->assertAuthenticated();
 });
 
 test('registration fails when email or username is already taken', function () {
@@ -78,3 +79,4 @@ test('authenticated user can logout', function () {
     $response->assertRedirect('/login');
     $this->assertGuest();
 });
+

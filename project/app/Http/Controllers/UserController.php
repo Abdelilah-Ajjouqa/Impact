@@ -73,10 +73,10 @@ class UserController extends Controller
 
     public function update(UserRequest $request, string $id)
     {
-        try {
-            $user = User::findOrFail($id);
-            Gate::authorize('update', $user);
+        $user = User::findOrFail($id);
+        Gate::authorize('update', $user);
 
+        try {
             $data = $request->validated();
 
             if ($request->hasFile('avatar')) {
@@ -105,10 +105,10 @@ class UserController extends Controller
 
     public function destroy(Request $request, string $id)
     {
-        try {
-            $user = User::findOrFail($id);
-            Gate::authorize('delete', $user);
+        $user = User::findOrFail($id);
+        Gate::authorize('delete', $user);
 
+        try {
             $isSelf = Auth::id() == $user->id;
             $user->delete();
 

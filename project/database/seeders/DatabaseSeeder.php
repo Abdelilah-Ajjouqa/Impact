@@ -228,7 +228,7 @@ class DatabaseSeeder extends Seeder
             $album = Album::firstOrCreate(
                 [
                     'user_id' => $demoUser->id,
-                    'name' => 'Visual Inspiration 2025',
+                    'title' => 'Visual Inspiration 2025',
                 ],
                 [
                     'description' => 'A curated collection of design references and mood board imagery.'
