@@ -23,14 +23,14 @@
                                     @if(str_contains($media->type, 'video'))
                                         <div class="relative">
                                             <video class="w-full h-auto" preload="metadata">
-                                                <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
+                                                <source src="{{ $media->url }}" type="{{ $media->type }}">
                                             </video>
                                             <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
                                                 <i class="fas fa-play-circle text-white text-4xl"></i>
                                             </div>
                                         </div>
                                     @else
-                                        <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $post->title }}" class="w-full h-auto">
+                                        <img src="{{ $media->url }}" alt="{{ $post->title }}" class="w-full h-auto">
                                     @endif
                                 @else
                                     <div class="bg-gray-200 w-full" style="aspect-ratio: 3/4;"></div>

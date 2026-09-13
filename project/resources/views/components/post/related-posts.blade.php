@@ -11,12 +11,12 @@
                             class="block hover:opacity-85 overflow-hidden rounded-t-lg">
                             @if ($item->mediaContent->first() && str_contains($item->mediaContent->first()->type, 'video'))
                                 <video class="w-full object-cover" autoplay muted loop playsinline>
-                                    <source src="{{ asset('storage/' . $item->mediaContent->first()->path) }}"
+                                    <source src="{{ $item->mediaContent->first()->url }}"
                                         type="{{ $item->mediaContent->first()->type }}">
                                     Your browser does not support the video tag.
                                 </video>
                             @elseif ($item->mediaContent->first())
-                                <img src="{{ asset('storage/' . $item->mediaContent->first()->path) }}"
+                                <img src="{{ $item->mediaContent->first()->url }}"
                                     alt="{{ $item->title }}" class="w-full object-cover">
                             @else
                                 <div class="bg-gray-200 w-full" style="aspect-ratio: 4/3;"></div>

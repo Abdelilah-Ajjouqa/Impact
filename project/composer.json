@@ -1,11 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "abdelilah/impact",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Impact - A modern visual discovery, bookmarking, and media-sharing platform built with Laravel 12 and Tailwind CSS.",
     "keywords": [
         "laravel",
-        "framework"
+        "visual-bookmarking",
+        "pinterest-clone",
+        "media-platform",
+        "tailwind-css"
     ],
     "license": "MIT",
     "require": {

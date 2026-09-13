@@ -10,3 +10,110 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* Layout Styles */
+.layout-container {
+    min-height: 100vh;
+    background-color: white;
+}
+
+/* Masonry Grid Styles */
+.masonry-grid {
+    column-count: 1;
+    column-gap: 16px;
+}
+
+@media (min-width: 640px) {
+    .masonry-grid {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 768px) {
+    .masonry-grid {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 1024px) {
+    .masonry-grid {
+        column-count: 4;
+    }
+}
+
+@media (min-width: 1280px) {
+    .masonry-grid {
+        column-count: 5;
+    }
+}
+
+.masonry-item {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+/* Navigation Styles */
+.nav-container {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+}
+
+.nav-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Search Bar Styles */
+.search-container {
+    flex-grow: 1;
+    margin: 0 1rem;
+}
+
+.search-input {
+    width: 100%;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 0.75rem;
+    color: #6b7280;
+}
+
+/* Footer Styles */
+.footer-container {
+    background-color: white;
+    padding: 1.5rem 0;
+}
+
+.footer-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Alert Styles */
+.alert-success {
+    background-color: #d1fae5;
+    border-color: #34d399;
+    color: #065f46;
+}
+
+.alert-error {
+    background-color: #fee2e2;
+    border-color: #f87171;
+    color: #991b1b;
+}
+

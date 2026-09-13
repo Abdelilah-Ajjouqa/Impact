@@ -25,11 +25,11 @@
                                     @php $media = $item->mediaContent->first(); @endphp
                                     @if (str_contains($media->type, 'video'))
                                         <video class="w-full object-cover" autoplay muted loop playsinline>
-                                            <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
+                                            <source src="{{ $media->url }}" type="{{ $media->type }}">
                                             Your browser does not support the video tag.
                                         </video>
                                     @else
-                                        <img src="{{ asset('storage/' . $media->path) }}"
+                                        <img src="{{ $media->url }}"
                                             alt="{{ $item->title }}" class="w-full object-cover">
                                     @endif
                                 @else

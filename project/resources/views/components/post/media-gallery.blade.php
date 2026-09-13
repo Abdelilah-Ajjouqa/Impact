@@ -9,14 +9,14 @@
                         class="media-item w-full h-full flex items-center justify-center {{ $index > 0 ? 'hidden' : '' }}">
                         <video class="w-full h-auto max-h-[80vh] object-contain" controls loop playsinline
                             preload="metadata">
-                            <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
+                            <source src="{{ $media->url }}" type="{{ $media->type }}">
                             Your browser does not support the video tag.
                         </video>
                     </div>
                 @else
                     <div id="media-{{ $index }}"
                         class="media-item w-full h-full flex items-center justify-center {{ $index > 0 ? 'hidden' : '' }}">
-                        <img src="{{ asset('storage/' . $media->path) }}"
+                        <img src="{{ $media->url }}"
                             alt="{{ $mediaContent->first()->title ?? 'Post image' }} - Image {{ $index + 1 }}"
                             class="w-full h-auto max-h-[80vh] object-contain">
                     </div>

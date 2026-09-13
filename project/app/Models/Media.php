@@ -22,4 +22,15 @@ class Media extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getUrlAttribute(): string
+    {
+        if (str_starts_with($this->path, 'http://') || str_starts_with($this->path, 'https://')) {
+            return $this->path;
+        }
+        if (str_starts_with($this->path, '/storage/')) {
+            return asset(ltrim($this->path, '/'));
+        }
+        return asset('storage/' . $this->path);
+    }
 }

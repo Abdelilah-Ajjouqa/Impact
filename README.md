@@ -1,249 +1,168 @@
-# Fil Rouge
+# Impact 🎨✨
+### *Modern Visual Discovery & Creative Media Bookmarking Platform*
 
-## Sommaire
+[![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Pest](https://img.shields.io/badge/Tests-Pest_PHP-F43F5E?style=for-the-badge&logo=php&logoColor=white)](https://pestphp.com)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-- [Présentation du projet](#présentation-du-projet)
-- [Objectifs](#objectifs)
-- [Description graphique et ergonomique](#description-graphique-et-ergonomique)
-- [Fonctionnalités](#fonctionnalités)
-- [Choix technologiques](#choix-technologiques)
-- [Compatibilité](#compatibilité)
-- [Sécurité et conformité](#sécurité-et-conformité)
-- [Guide d'installation et d'exécution](#guide-dinstallation-et-dexécution)
-- [Conclusion](#conclusion)
+---
 
-## Présentation du projet
+## 🌟 Overview
 
-### Présentation de l'entreprise
+**Impact** is a full-stack visual discovery and bookmarking platform inspired by Pinterest and Unsplash. Built with modern web standards, Impact empowers creators, photographers, and visual enthusiasts to share high-resolution media, curate themed albums, explore trending design tags, and cultivate creative networks.
 
-Impact est une plateforme web inspirée de Pinterest, permettant de partager et de découvrir des contenus multimédias tels que des photos et des vidéos. Le projet est développé dans le cadre d'un exercice académique ou d'un portfolio personnel.
+The platform is engineered following enterprise PHP/Laravel standards, featuring granular authorization policies, eager-loaded Eloquent relationships to eliminate N+1 bottlenecks, an automated Vite asset bundling pipeline, and interactive AJAX social graph interactions.
 
-### Nom du site
+---
 
-**Impact**
+## 🚀 Key Features
 
-### Public cible
+- **Responsive Masonry Feed**: Dynamic Pinterest-style multi-column layout with smooth image cards, hover actions, and pagination.
+- **Dynamic Follow / Unfollow System**: Zero-reload AJAX follow mechanics that live-sync follower counts across posts and profile views.
+- **Rich Media Sharing**: Support for multi-image albums, animated media, high-resolution photography, and embedded video previews.
+- **Role-Based Access Control (RBAC)**:
+  - **Creators/Users**: Publish posts, organize albums, bookmark private favorites, leave comments, and customize profiles.
+  - **Administrators**: Moderation suite to activate/deactivate accounts, audit archived posts, manage comments, and review platform telemetry.
+- **Strict Authorization & IDOR Protection**: Enforced with Laravel Policies (`PostPolicy`, `UserPolicy`) and custom middleware guards (`PostStatusMiddleware`, `AdminMiddleware`).
+- **Tag Discovery & Search Engine**: Fast multi-tag categorization with full-text search across titles, descriptions, and creator handles.
+- **Curated Collections**: Create public/private albums and bookmark inspiration with instant saved collections.
 
-- Passionnés de photographie et de vidéographie souhaitant partager leurs œuvres.
-- Curieux et amateurs de contenu visuel à la recherche d'inspiration.
-- Développeurs et designers intéressés par les projets open source.
+---
 
-### Technologies utilisées
+## 🏗️ Architecture & Engineering Highlights
 
-- **Frontend :** HTML5, CSS3, Tailwind CSS, Blade (Laravel) et JavaScript.
-- **Backend :** PHP avec le framework Laravel.
-- **Base de données :** MySQL.
-
-### Périmètre du projet
-
-- Publication, consultation et interaction avec des contenus multimédias.
-- Design responsive adapté aux ordinateurs, tablettes et smartphones.
-- Interface conviviale favorisant une navigation intuitive.
-
-## Objectifs
-
-- Offrir une plateforme intuitive pour le partage de photos et de vidéos.
-- Permettre aux utilisateurs de publier, consulter, commenter et aimer des contenus.
-- Assurer une gestion efficace des utilisateurs et des contenus via une interface d'administration.
-- Garantir la sécurité des données et des interactions sur la plateforme.
-
-## Description graphique et ergonomique
-
-### Charte graphique
-
-- Design épuré et moderne mettant en valeur le contenu visuel.
-- Palette de couleurs neutres avec des accents vifs pour les éléments interactifs.
-- Typographie claire et lisible pour une meilleure expérience utilisateur.
-
-### Inspirations
-
-- **Pinterest :** disposition en grille des contenus.
-- **Unsplash :** mise en avant d'images de haute qualité.
-- **Instagram :** interactions sociales telles que les likes et les commentaires.
-
-### Logo
-
-- Icône représentant une épingle ou un appareil photo, symbolisant le partage de contenu visuel.
-- Typographie moderne reflétant la simplicité et l'élégance de la plateforme.
-
-## Fonctionnalités
-
-### Structure du site
-
-- **Accueil :** présentation des contenus récents et populaires.
-- **Galerie :** affichage en grille des photos et vidéos.
-- **Publication :** formulaire pour publier de nouveaux contenus.
-- **Profil utilisateur :** informations et contenus de l'utilisateur.
-- **Connexion / inscription :** accès au compte utilisateur.
-- **Administration :** gestion des utilisateurs et des contenus.
-
-### Fonctionnalités par rôle
-
-#### Utilisateurs
-
-- **Inscription et connexion :** création de compte et authentification sécurisée.
-- **Publication de contenus :** upload de photos ou vidéos avec titre et description.
-- **Consultation de la galerie :** navigation parmi les contenus publiés.
-- **Interactions sociales :** possibilité d'aimer et de commenter les contenus.
-- **Gestion du profil :** modification des informations personnelles et visualisation des contenus publiés.
-
-#### Administrateurs
-
-- **Gestion des utilisateurs :** visualisation, modification et suppression des comptes.
-- **Modération des contenus :** validation, édition ou suppression des publications.
-- **Gestion des commentaires :** surveillance et modération des interactions sociales.
-- **Tableau de bord :** statistiques sur l'utilisation de la plateforme et les contenus populaires.
-
-## Choix technologiques
-
-### Frontend
-
-- HTML5, CSS3 et Tailwind CSS pour la structure et le style.
-- Blade (Laravel) pour les templates dynamiques.
-- JavaScript pour les interactions côté client.
-
-### Backend
-
-- PHP avec le framework Laravel pour une architecture MVC robuste.
-- MySQL pour la gestion des données relationnelles.
-
-### Sécurité
-
-- Middleware Laravel pour la protection des routes.
-- Validation des formulaires côté serveur afin d'éviter les injections et les données invalides.
-
-## Compatibilité
-
-### Navigateurs compatibles
-
-- Google Chrome
-- Mozilla Firefox
-- Safari
-- Microsoft Edge
-
-### Appareils
-
-- Ordinateurs de bureau
-- Tablettes
-- Smartphones
-
-## Sécurité et conformité
-
-- **Authentification :** système de connexion sécurisé avec gestion des sessions.
-- **Autorisation :** contrôle d'accès basé sur les rôles utilisateur et administrateur.
-- **Protection des données :** chiffrement des mots de passe et sécurisation des données sensibles.
-- **Conformité :** respect des bonnes pratiques en matière de développement web sécurisé.
-
-## Guide d'installation et d'exécution
-
-Pour installer, configurer et lancer l'application **Impact** en environnement local, suivez les étapes détaillées ci-dessous :
-
-### 1. Prérequis système
-
-- **PHP** >= 8.2 (extensions recommandées : `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `fileinfo`)
-- **Composer** (gestionnaire de dépendances PHP)
-- **Node.js** (v18+ recommandé) et **npm**
-- **MySQL** (ou un serveur MariaDB équivalent)
-
-### 2. Accéder au répertoire du projet Laravel
-
-Le code source de l'application se situe dans le sous-dossier `project/`. Ouvrez votre terminal et naviguez dans ce répertoire :
-
-```bash
-cd project
+```
+project/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/       # Resourceful & single-responsibility controllers
+│   │   │   ├── AuthController.php
+│   │   │   ├── PostController.php
+│   │   │   ├── FollowController.php
+│   │   │   └── UserController.php
+│   │   ├── Middleware/        # Route-level security guards (UserStatus, Admin, PostStatus)
+│   │   └── Requests/          # Strict form request validations (PostRequest, RegisterRequest, LoginRequest)
+│   ├── Models/                # Clean singular Eloquent models with relationship cascades & accessors
+│   │   ├── Post.php
+│   │   ├── Media.php
+│   │   ├── User.php
+│   │   └── Comment.php
+│   └── Policies/              # Gate definitions ensuring ownership security
+├── database/
+│   ├── factories/             # State-driven factories for automated testing
+│   ├── migrations/            # Clean relational schema with indexed foreign keys
+│   └── seeders/               # Comprehensive DatabaseSeeder with realistic demo data
+└── tests/
+    └── Feature/               # Pest test suites covering Auth, Posts, Policies, and Follow system
 ```
 
-### 3. Installation des dépendances
+### Technical Highlights:
+1. **Zero N+1 Query Overhead**: Feed and profile queries utilize compound eager-loading (`with(['mediaContent', 'tags', 'user'])`) and database-level aggregate preloads (`withCount(['followers', 'following'])`).
+2. **Unified Media & Avatar Resolution**: Seamless accessors (`avatar_url`, `url`) dynamically detect external CDNs, cloud storage, or local filesystem links without view-layer hacks.
+3. **Resilient Asset Pipeline**: Completely decoupled from third-party CDN scripts, bundled via modern **Vite 6** and **Tailwind CSS 4**.
 
-Installez les dépendances backend (PHP) et frontend (JavaScript / Tailwind CSS) :
+---
 
+## 🛠️ Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| **Backend Framework** | Laravel 12.x (PHP 8.2+) |
+| **Database** | MySQL / MariaDB (or SQLite for testing) |
+| **Frontend & Styling** | Blade Templates, Tailwind CSS 4, Alpine.js, FontAwesome 6 |
+| **Build Tooling** | Vite 6, PostCSS, Axios |
+| **Test Framework** | Pest PHP & PHPUnit |
+
+---
+
+## ⚡ Quickstart Guide
+
+### Prerequisites
+- **PHP** >= 8.2 with PDO, OpenSSL, and Mbstring extensions
+- **Composer** >= 2.x
+- **Node.js** >= 18.x & **NPM**
+- **MySQL** / **MariaDB**
+
+### 1. Clone & Enter Repository
 ```bash
-# Dépendances PHP (Laravel et packages)
-composer install
+git clone https://github.com/Abdelilah-Ajjouqa/Impact.git
+cd Impact/project
+```
 
-# Dépendances Node.js (Vite, Tailwind CSS, etc.)
+### 2. Install Dependencies
+```bash
+composer install
 npm install
 ```
 
-### 4. Configuration des variables d'environnement
+### 3. Environment Configuration
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+*Configure your database credentials in `.env` (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).*
 
-1. Créez votre fichier d'environnement `.env` à partir du fichier d'exemple :
-   ```bash
-   # Sur Linux / macOS / Git Bash :
-   cp .env.example .env
+### 4. Run Migrations & Rich Seeders
+```bash
+php artisan migrate --seed
+php artisan storage:link
+```
 
-   # Sur Windows (cmd / PowerShell) :
-   copy .env.example .env
-   ```
+### 5. Build Assets & Start Development Server
+```bash
+npm run build
+php artisan serve
+```
 
-2. Générez la clé de chiffrement de l'application :
-   ```bash
-   php artisan key:generate
-   ```
+Visit [`http://127.0.0.1:8000`](http://127.0.0.1:8000) in your browser.
 
-3. Modifiez le fichier `.env` pour configurer la connexion à votre base de données MySQL :
-   ```env
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=impact_db
-   DB_USERNAME=root
-   DB_PASSWORD=
-   ```
-   > **Note :** Veillez à créer au préalable la base de données (ex: `impact_db`) dans votre serveur MySQL avant de passer à l'étape suivante.
+---
 
-### 5. Migration de la base de données et lien de stockage
+## 🔑 Demo Accounts
 
-1. Exécutez les migrations pour créer toutes les tables nécessaires (`users`, `posts`, `comments`, `media`, `tags`, `albums`, `activities`, etc.) :
-   ```bash
-   php artisan migrate
-   ```
+The database seeder pre-populates rich accounts, posts, tags, comments, and social graph links:
 
-2. Créez le lien symbolique vers le dossier de stockage (obligatoire pour rendre accessibles publiquement les fichiers multimédias uploadés) :
-   ```bash
-   php artisan storage:link
-   ```
+| Role | Email | Password | Access / Capabilities |
+|---|---|---|---|
+| **Administrator** | `admin@impact.test` | `password` | Full moderation dashboard, user management, post archiving |
+| **Demo Creator** | `demo@impact.test` | `password` | Creator profile, albums, followers, saved posts |
+| **Community Creator** | `elena@impact.test` | `password` | Sample creator account with photography posts |
 
-### 6. Lancement du projet
+---
 
-Vous pouvez démarrer l'application de deux façons :
+## 🧪 Automated Testing
 
-- **Méthode 1 (Recommandée - Laravel 12) :**
-  Lancez simultanément le serveur de développement Laravel, les files d'attente et le watcher Vite :
-  ```bash
-  composer run dev
-  ```
+Impact includes a comprehensive suite of automated tests powered by **Pest PHP**:
 
-- **Méthode 2 (Terminaux séparés) :**
-  - Dans un premier terminal, démarrez le serveur Laravel :
-    ```bash
-    php artisan serve
-    ```
-  - Dans un deuxième terminal, lancez le serveur de développement Vite :
-    ```bash
-    npm run dev
-    ```
+```bash
+# Run all automated tests
+php artisan test
 
-- **Méthode 3 (Docker Compose) :**
-  Pour exécuter l'application conteneurisée avec Docker Desktop :
-  ```bash
-  cd project
-  docker compose up -d
-  ```
-  Pour arrêter le conteneur :
-  ```bash
-  docker compose down
-  ```
+# Run specific feature tests
+php artisan test --filter=PostTest
+php artisan test --filter=FollowTest
+php artisan test --filter=AuthTest
+```
 
-L'application sera accessible dans votre navigateur à l'adresse : **[http://127.0.0.1:8000](http://127.0.0.1:8000)** (ou `http://localhost:8000`).
+### Test Coverage Highlights:
+- ✅ **Authentication**: Registration validation, credential verification, session handling, logout.
+- ✅ **Authorization & Security**: Guest boundaries, IDOR prevention on post edit/update/destroy, private post isolation.
+- ✅ **Social Graph**: Follow toggle mechanics, self-follow prohibition (422), unauthenticated rejection.
 
-### 7. Gestion des comptes et rôle administrateur
+---
 
-- Accédez à la route `/register` pour créer un compte utilisateur.
-- Pour tester les fonctionnalités d'administration (`/admin/dashboard`), mettez à jour la colonne `role` de votre enregistrement utilisateur dans la table `users` en lui attribuant la valeur `'admin'`.
+## 📁 Academic & Design Specifications
 
-## Conclusion
+Academic project deliverables and planning documentation are preserved in their respective directories:
+- **Project Specifications**: [`Cahier de charge/`](Cahier%20de%20charge/)
+- **Architecture & UML**: [`uml/1.drawio`](uml/1.drawio)
+- **Presentation**: [`presentation/link-to-canva.txt`](presentation/link-to-canva.txt)
 
-Ce cahier des charges définit les spécifications fonctionnelles et techniques du projet Fil Rouge, une plateforme web dédiée au partage et à la découverte de contenus multimédias. En s'appuyant sur des technologies modernes et une architecture solide, le projet vise à offrir une expérience utilisateur fluide et sécurisée, tout en mettant en valeur les compétences en développement web full-stack.
+---
 
+## 📄 License
 
+This project is open-sourced software licensed under the [MIT License](LICENSE).
