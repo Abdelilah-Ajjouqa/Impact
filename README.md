@@ -9,6 +9,7 @@
 - [Choix technologiques](#choix-technologiques)
 - [Compatibilité](#compatibilité)
 - [Sécurité et conformité](#sécurité-et-conformité)
+- [Guide d'installation et d'exécution](#guide-dinstallation-et-dexécution)
 - [Conclusion](#conclusion)
 
 ## Présentation du projet
@@ -132,6 +133,114 @@ Impact est une plateforme web inspirée de Pinterest, permettant de partager et 
 - **Autorisation :** contrôle d'accès basé sur les rôles utilisateur et administrateur.
 - **Protection des données :** chiffrement des mots de passe et sécurisation des données sensibles.
 - **Conformité :** respect des bonnes pratiques en matière de développement web sécurisé.
+
+## Guide d'installation et d'exécution
+
+Pour installer, configurer et lancer l'application **Impact** en environnement local, suivez les étapes détaillées ci-dessous :
+
+### 1. Prérequis système
+
+- **PHP** >= 8.2 (extensions recommandées : `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `fileinfo`)
+- **Composer** (gestionnaire de dépendances PHP)
+- **Node.js** (v18+ recommandé) et **npm**
+- **MySQL** (ou un serveur MariaDB équivalent)
+
+### 2. Accéder au répertoire du projet Laravel
+
+Le code source de l'application se situe dans le sous-dossier `project/`. Ouvrez votre terminal et naviguez dans ce répertoire :
+
+```bash
+cd project
+```
+
+### 3. Installation des dépendances
+
+Installez les dépendances backend (PHP) et frontend (JavaScript / Tailwind CSS) :
+
+```bash
+# Dépendances PHP (Laravel et packages)
+composer install
+
+# Dépendances Node.js (Vite, Tailwind CSS, etc.)
+npm install
+```
+
+### 4. Configuration des variables d'environnement
+
+1. Créez votre fichier d'environnement `.env` à partir du fichier d'exemple :
+   ```bash
+   # Sur Linux / macOS / Git Bash :
+   cp .env.example .env
+
+   # Sur Windows (cmd / PowerShell) :
+   copy .env.example .env
+   ```
+
+2. Générez la clé de chiffrement de l'application :
+   ```bash
+   php artisan key:generate
+   ```
+
+3. Modifiez le fichier `.env` pour configurer la connexion à votre base de données MySQL :
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=impact_db
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+   > **Note :** Veillez à créer au préalable la base de données (ex: `impact_db`) dans votre serveur MySQL avant de passer à l'étape suivante.
+
+### 5. Migration de la base de données et lien de stockage
+
+1. Exécutez les migrations pour créer toutes les tables nécessaires (`users`, `posts`, `comments`, `media`, `tags`, `albums`, `activities`, etc.) :
+   ```bash
+   php artisan migrate
+   ```
+
+2. Créez le lien symbolique vers le dossier de stockage (obligatoire pour rendre accessibles publiquement les fichiers multimédias uploadés) :
+   ```bash
+   php artisan storage:link
+   ```
+
+### 6. Lancement du projet
+
+Vous pouvez démarrer l'application de deux façons :
+
+- **Méthode 1 (Recommandée - Laravel 12) :**
+  Lancez simultanément le serveur de développement Laravel, les files d'attente et le watcher Vite :
+  ```bash
+  composer run dev
+  ```
+
+- **Méthode 2 (Terminaux séparés) :**
+  - Dans un premier terminal, démarrez le serveur Laravel :
+    ```bash
+    php artisan serve
+    ```
+  - Dans un deuxième terminal, lancez le serveur de développement Vite :
+    ```bash
+    npm run dev
+    ```
+
+- **Méthode 3 (Docker Compose) :**
+  Pour exécuter l'application conteneurisée avec Docker Desktop :
+  ```bash
+  cd project
+  docker compose up -d
+  ```
+  Pour arrêter le conteneur :
+  ```bash
+  docker compose down
+  ```
+
+L'application sera accessible dans votre navigateur à l'adresse : **[http://127.0.0.1:8000](http://127.0.0.1:8000)** (ou `http://localhost:8000`).
+
+### 7. Gestion des comptes et rôle administrateur
+
+- Accédez à la route `/register` pour créer un compte utilisateur.
+- Pour tester les fonctionnalités d'administration (`/admin/dashboard`), mettez à jour la colonne `role` de votre enregistrement utilisateur dans la table `users` en lui attribuant la valeur `'admin'`.
 
 ## Conclusion
 
