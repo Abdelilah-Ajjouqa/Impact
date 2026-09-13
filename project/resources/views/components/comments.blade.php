@@ -7,8 +7,8 @@
         <form action="{{ route('comments.store', $post->id) }}" method="POST" class="mb-6">
             @csrf
             <div class="flex items-center">
-                <img src="{{ Auth::user()->avatar ?? 'https://placehold.co/40' }}" alt="User"
-                    class="w-8 h-8 rounded-full mr-2">
+                <img src="{{ Auth::user()->avatar_url }}" alt="User"
+                    class="w-8 h-8 rounded-full mr-2 object-cover">
                 <input type="text" name="content" placeholder="Add a comment"
                     class="flex-grow border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
                     required>
@@ -28,8 +28,8 @@
         @forelse($post->comments ?? [] as $comment)
             <div class="flex items-center" x-data="{ isEditing: false, isMenuOpen: false }">
                 <a href="{{ route('users.show', $comment->user_id) }}">
-                    <img src="{{ $comment->user->avatar ?? 'https://placehold.co/40' }}" alt="User"
-                        class="w-8 h-8 rounded-full mr-2">
+                    <img src="{{ $comment->user->avatar_url ?? 'https://placehold.co/40' }}" alt="User"
+                        class="w-8 h-8 rounded-full mr-2 object-cover">
                 </a>
                 <div class="bg-gray-100 rounded-2xl px-4 py-[5px] flex-grow flex justify-between">
                     <div class="flex-grow">

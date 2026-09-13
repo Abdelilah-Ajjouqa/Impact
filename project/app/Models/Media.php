@@ -15,6 +15,11 @@ class Media extends Model
 
     public function post()
     {
-        return $this->belongsTo(Posts::class);
+        return $this->belongsTo(Post::class, 'post_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

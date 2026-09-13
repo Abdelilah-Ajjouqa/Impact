@@ -6,22 +6,16 @@
     <div class="max-w-5xl mx-auto">
         <!-- Cover Image -->
         <div class="relative h-64 rounded-lg mb-6">
-            @if ($user->cover)
-                <img src="{{ asset($user->cover) }}" alt="Cover" class="w-full h-full object-cover">
+            @if ($user->cover_url)
+                <img src="{{ $user->cover_url }}" alt="Cover" class="w-full h-full object-cover">
             @else
-                <div class="w-full h-full bg-gradient-to-r from-red-500 to-pink-500"></div>
+                <div class="w-full h-full bg-gradient-to-r from-sky-500 to-indigo-500"></div>
             @endif
 
             <!-- Profile Image -->
             <div class="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2">
                 <div class="w-32 h-32 rounded-full border-4 border-white overflow-hidden bg-white">
-                    @if ($user->avatar)
-                        <img src="{{ $user->avatar }}" alt="{{ $user->username }}" class="w-full h-full object-cover">
-                    @else
-                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <i class="fas fa-user text-gray-400 text-4xl"></i>
-                        </div>
-                    @endif
+                    <img src="{{ $user->avatar_url }}" alt="{{ $user->username }}" class="w-full h-full object-cover">
                 </div>
             </div>
         </div>

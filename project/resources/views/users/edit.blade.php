@@ -18,14 +18,8 @@
                                 <label class="block text-gray-700 font-medium mb-2">Profile Picture</label>
                                 <div class="flex items-center">
                                     <div class="w-24 h-24 rounded-full overflow-hidden bg-gray-200 mr-4">
-                                        @if ($user->avatar)
-                                            <img src="{{ asset($user->avatar) }}" alt="{{ $user->username }}"
-                                                class="w-full h-full object-cover">
-                                        @else
-                                            <div class="w-full h-full flex items-center justify-center">
-                                                <i class="fas fa-user text-gray-400 text-3xl"></i>
-                                            </div>
-                                        @endif
+                                        <img src="{{ $user->avatar_url }}" alt="{{ $user->username }}"
+                                            class="w-full h-full object-cover">
                                     </div>
                                     <div>
                                         <input type="file" id="avatar" name="avatar"
@@ -48,11 +42,11 @@
                                 <label class="block text-gray-700 font-medium mb-2">Cover Image</label>
                                 <div class="mb-2">
                                     <div class="w-full h-32 rounded-lg overflow-hidden bg-gray-200">
-                                        @if ($user->cover)
-                                            <img src="{{ asset($user->cover) }}" alt="Cover"
+                                        @if ($user->cover_url)
+                                            <img src="{{ $user->cover_url }}" alt="Cover"
                                                 class="w-full h-full object-cover">
                                         @else
-                                            <div class="w-full h-full bg-gradient-to-r from-red-500 to-pink-500"></div>
+                                            <div class="w-full h-full bg-gradient-to-r from-sky-500 to-indigo-500"></div>
                                         @endif
                                     </div>
                                 </div>

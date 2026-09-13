@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Posts;
+use App\Models\Post;
 use App\Models\SavedPost;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class SavedPostController extends Controller
 {
     public function save($postId)
     {
         try {
-            $post = Posts::findOrFail($postId);
+            $post = Post::findOrFail($postId);
+            Gate::authorize('view', $post);
 
             $existingSave = SavedPost::where('user_id', Auth::id())
                 ->where('post_id', $postId)
@@ -42,13 +45,14 @@ class SavedPostController extends Controller
             }
             return redirect()->back()->with('success', 'Post saved successfully.');
         } catch (Exception $e) {
+            Log::error('SavedPost save error: ' . $e->getMessage());
             if (request()->ajax() || request()->wantsJson()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Error saving post: ' . $e->getMessage()
+                    'message' => 'Unable to save post.'
                 ], 500);
             }
-            return redirect()->back()->with('error', 'Error saving post: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Unable to save post.');
         }
     }
 
@@ -78,27 +82,33 @@ class SavedPostController extends Controller
             }
             return redirect()->back()->with('success', 'Post unsaved successfully.');
         } catch (Exception $e) {
+            Log::error('SavedPost unsave error: ' . $e->getMessage());
             if (request()->ajax() || request()->wantsJson()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Error unsaving post: ' . $e->getMessage()
+                    'message' => 'Unable to unsave post.'
                 ], 500);
             }
-            return redirect()->back()->with('error', 'Error unsaving post: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Unable to unsave post.');
         }
     }
 
     public function getSavedPosts($userId)
     {
         try {
+            if (Auth::id() != $userId && (!Auth::check() || Auth::user()->role !== 'admin')) {
+                abort(403, 'Unauthorized access to saved posts.');
+            }
+
             $user = User::findOrFail($userId);
-            $savedPosts = SavedPost::with(['post', 'user'])
+            $savedPosts = SavedPost::with(['post.mediaContent', 'user'])
                 ->where('user_id', $userId)
                 ->latest()
                 ->get();
             return view('saved-posts.index', compact('savedPosts', 'user'));
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error retrieving saved posts: ' . $e->getMessage());
+            Log::error('SavedPost getSavedPosts error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error retrieving saved posts.');
         }
     }
 }

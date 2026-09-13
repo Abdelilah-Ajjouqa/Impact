@@ -8,8 +8,8 @@
 
 <div class="flex items-center mb-6">
     <a href="{{ route('users.show', $post->user_id) }}" class="flex items-center">
-        <img src="{{ $post->user->avatar ?? 'https://placehold.co/40' }}" alt="User"
-            class="w-10 h-10 rounded-full mr-3">
+        <img src="{{ $post->user->avatar_url ?? 'https://placehold.co/40' }}" alt="User"
+            class="w-10 h-10 rounded-full mr-3 object-cover">
         <div>
             <h3 class="font-semibold">{{ $post->user->username }}</h3>
             <p class="text-gray-600 text-sm">{{ $post->user->followers_count ?? 0 }} followers</p>

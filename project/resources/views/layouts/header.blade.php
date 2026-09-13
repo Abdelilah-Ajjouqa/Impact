@@ -50,8 +50,8 @@
                 </a>
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center focus:outline-none">
-                        <img src="{{ Auth::user()->avatar ?? 'https://placehold.co/40' }}" alt="Profile"
-                            class="w-8 h-8 rounded-full hover:opacity-80">
+                        <img src="{{ Auth::user()->avatar_url }}" alt="Profile"
+                            class="w-8 h-8 rounded-full hover:opacity-80 object-cover">
                     </button>
                     <div x-show="open" @click.away="open = false"
                         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">

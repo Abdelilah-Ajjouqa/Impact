@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\Album;
-use App\Models\Posts;
+use App\Models\Post;
 use App\Models\SavedPost;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -30,35 +32,42 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $posts = Posts::where('user_id', $id)
+            $posts = Post::where('user_id', $id)
                 ->where(function ($query) {
-                    $query->where('status', 'public')
+                    $query->where('status', Post::STATUS_PUBLIC)
                         ->orWhere(function ($q) {
                             if (Auth::check()) {
                                 $q->where('user_id', Auth::id());
                             }
                         });
                 })
+                ->with(['mediaContent', 'user', 'tags'])
+                ->latest()
                 ->get();
 
-            $savedPosts = collect(); // Empty collection for guests
-            if (Auth::check()) {
+            // Saved posts are private to the account owner
+            $savedPosts = collect();
+            if (Auth::check() && Auth::id() == $user->id) {
                 $savedPosts = SavedPost::with(['post.mediaContent', 'post.user'])
                     ->where('user_id', $id)
+                    ->latest()
                     ->get();
             }
 
             return view('users.show', compact('user', 'posts', 'savedPosts'));
         } catch (Exception $e) {
+            Log::error('User show error: ' . $e->getMessage());
             return redirect()
-                ->back()
-                ->with('error', 'User not found: ' .  $e->getMessage());
+                ->route('posts.index')
+                ->with('error', 'User not found');
         }
     }
 
     public function edit($id)
     {
         $user = User::findOrFail($id);
+        Gate::authorize('update', $user);
+
         return view('users.edit', compact('user'));
     }
 
@@ -66,16 +75,17 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
+            Gate::authorize('update', $user);
+
             $data = $request->validated();
 
-
             if ($request->hasFile('avatar')) {
-                $avatarPath = '/storage/' . $request->file('avatar')->store('avatars');
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
                 $data['avatar'] = $avatarPath;
             }
 
             if ($request->hasFile('cover')) {
-                $coverPath = '/storage/' . $request->file('cover')->store('covers');
+                $coverPath = $request->file('cover')->store('covers', 'public');
                 $data['cover'] = $coverPath;
             }
 
@@ -85,26 +95,41 @@ class UserController extends Controller
                 ->route('users.show', $user->id)
                 ->with('success', 'Profile updated successfully');
         } catch (Exception $e) {
+            Log::error('User update error: ' . $e->getMessage());
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Failed to update profile: ' . $e->getMessage());
+                ->with('error', 'Failed to update profile. Please try again.');
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         try {
             $user = User::findOrFail($id);
+            Gate::authorize('delete', $user);
+
+            $isSelf = Auth::id() == $user->id;
             $user->delete();
 
-            return redirect()
-                ->route('users.index')
-                ->with('success', 'User deleted successfully');
-        } catch (Exception $e) {
+            if ($isSelf) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()
+                    ->route('posts.index')
+                    ->with('success', 'Your account has been deleted successfully.');
+            }
+
             return redirect()
                 ->back()
-                ->with('error', 'Failed to delete user: ' . $e->getMessage());
+                ->with('success', 'User deleted successfully');
+        } catch (Exception $e) {
+            Log::error('User delete error: ' . $e->getMessage());
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to delete user.');
         }
     }
 
@@ -117,7 +142,7 @@ class UserController extends Controller
 
             $albumId = $request->query('album_id');
 
-            $posts = Posts::where('user_id', $id)
+            $posts = Post::where('user_id', $id)
                 ->with('mediaContent')
                 ->when($albumId, function ($query, $albumId) {
                     return $query->whereDoesntHave('albums', function ($q, $albumId) {

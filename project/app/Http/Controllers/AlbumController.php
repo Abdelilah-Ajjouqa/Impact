@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
-use App\Models\Posts;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class AlbumController extends Controller
@@ -54,10 +55,11 @@ class AlbumController extends Controller
                 ->route('albums.show', $album->id)
                 ->with('success', 'Album created successfully!');
         } catch (Exception $e) {
+            Log::error('Album store error: ' . $e->getMessage());
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Failed to create album: ' . $e->getMessage());
+                ->with('error', 'Failed to create album. Please try again.');
         }
     }
 
@@ -129,10 +131,11 @@ class AlbumController extends Controller
                 ->route('albums.show', $album->id)
                 ->with('success', 'Album updated successfully!');
         } catch (Exception $e) {
+            Log::error('Album update error: ' . $e->getMessage());
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Failed to update album: ' . $e->getMessage());
+                ->with('error', 'Failed to update album. Please try again.');
         }
     }
 
@@ -159,9 +162,10 @@ class AlbumController extends Controller
                 ->route('albums.index')
                 ->with('success', 'Album deleted successfully!');
         } catch (Exception $e) {
+            Log::error('Album destroy error: ' . $e->getMessage());
             return redirect()
                 ->back()
-                ->with('error', 'Failed to delete album: ' . $e->getMessage());
+                ->with('error', 'Failed to delete album.');
         }
     }
 
@@ -187,7 +191,7 @@ class AlbumController extends Controller
                 ]);
             }
 
-            // Add post to album (removed user ownership check for posts)
+            // Add post to album
             $album->posts()->attach($postId);
 
             return response()->json([
@@ -195,10 +199,11 @@ class AlbumController extends Controller
                 'message' => 'Post added to album successfully'
             ]);
         } catch (Exception $e) {
+            Log::error('Album addPost error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
-                'message' => 'Album not found or you do not have permission to modify it: ' . $e->getMessage()
-            ], 404);
+                'message' => 'Unable to add post to album.'
+            ], 400);
         }
     }
 
@@ -235,16 +240,17 @@ class AlbumController extends Controller
                 ->back()
                 ->with('success', 'Post removed from album successfully!');
         } catch (Exception $e) {
+            Log::error('Album removePost error: ' . $e->getMessage());
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Failed to remove post from album: ' . $e->getMessage()
+                    'message' => 'Failed to remove post from album.'
                 ], 500);
             }
 
             return redirect()
                 ->back()
-                ->with('error', 'Failed to remove post from album: ' . $e->getMessage());
+                ->with('error', 'Failed to remove post from album.');
         }
     }
 }

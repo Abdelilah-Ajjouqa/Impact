@@ -4,13 +4,7 @@
 
 @section('content')
     <main class="container mx-auto">
-        {{-- animation --}}
-        <div id="animation" class="flex justify-center items-center min-h-[200px]">
-            @include('components.animation')
-        </div>
-
-        {{-- content --}}
-        <section id="content" class="hidden">
+        <section id="content">
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold">Discover Ideas</h1>
                 @auth
@@ -20,20 +14,28 @@
                     </a>
                 @endauth
             </div>
+
             <div class="masonry-grid">
-                @forelse($post as $item)
+                @forelse($posts as $item)
                     <div class="masonry-item">
                         <div class="bg-gray-50 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
                             <a href="{{ route('posts.show', $item->id) }}"
                                 class="block hover:opacity-85 overflow-hidden rounded-t-lg">
-                                @if (str_contains($item->mediaContent->first()->type, 'video'))
-                                    <video class="w-full object-cover" autoplay muted loop playsinline>
-                                        <source src="{{ asset('storage/' . $item->mediaContent->first()->path) }}" type="{{ $item->mediaContent->first()->type }}">
-                                        Your browser does not support the video tag.
-                                    </video>
+                                @if ($item->mediaContent->isNotEmpty())
+                                    @php $media = $item->mediaContent->first(); @endphp
+                                    @if (str_contains($media->type, 'video'))
+                                        <video class="w-full object-cover" autoplay muted loop playsinline>
+                                            <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    @else
+                                        <img src="{{ asset('storage/' . $media->path) }}"
+                                            alt="{{ $item->title }}" class="w-full object-cover">
+                                    @endif
                                 @else
-                                    <img src="{{ asset('storage/' . $item->mediaContent->first()->path) }}"
-                                        alt="{{ $item->title }}" class="w-full object-cover">
+                                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                        <i class="fas fa-image text-gray-400 text-3xl"></i>
+                                    </div>
                                 @endif
                             </a>
                             <div class="p-2">
@@ -44,18 +46,15 @@
                                 <div class="flex items-center justify-between mt-2">
                                     <a href="{{ route('users.show', $item->user_id) }}"
                                         class="flex items-center duration-300 hover:drop-shadow-2xl hover:text-red-500">
-                                        <img src="{{ $item->user->avatar ?? 'https://placehold.co/40' }}" alt="User"
-                                            class="w-8 h-8 rounded-full mr-2">
-                                        <span class="text-sm font-medium">{{ $item->user->username }}</span>
+                                        <img src="{{ $item->user->avatar_url ?? 'https://placehold.co/40' }}" alt="User"
+                                            class="w-8 h-8 rounded-full mr-2 object-cover">
+                                        <span class="text-sm font-medium">{{ $item->user->username ?? 'User' }}</span>
                                     </a>
 
                                     <div class="flex gap-x-1">
                                         @auth
                                             @php
-                                                // Check if the post is already saved
-                                                $isSaved = \App\Models\SavedPost::where('user_id', Auth::id())
-                                                    ->where('post_id', $item->id)
-                                                    ->exists();
+                                                $isSaved = isset($savedPostIds) && $savedPostIds->has($item->id);
                                             @endphp
                                             <button
                                                 class="unsave-btn text-gray-600 hover:text-red-600 p-1 rounded-full hover:bg-gray-100"
@@ -84,11 +83,13 @@
                                                             </button>
                                                         </form>
                                                     @endif
-                                                    <a href="{{ asset('storage/' . $item->mediaContent->first()->path) }}"
-                                                        download="{{ $item->title }}"
-                                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                                        <i class="fas fa-download mr-2"></i> Download
-                                                    </a>
+                                                    @if ($item->mediaContent->isNotEmpty())
+                                                        <a href="{{ asset('storage/' . $item->mediaContent->first()->path) }}"
+                                                            download="{{ $item->title }}"
+                                                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                                            <i class="fas fa-download mr-2"></i> Download
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endauth
@@ -118,21 +119,16 @@
                     </div>
                 @endforelse
             </div>
+
+            @if ($posts->hasPages())
+                <div class="mt-8 flex justify-center">
+                    {{ $posts->links() }}
+                </div>
+            @endif
         </section>
     </main>
 @endsection
 
 @section('scripts')
     @include('components.save')
-
-    <script>
-        let animation = document.getElementById('animation');
-        let content = document.getElementById('content');
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                animation.classList.add('hidden');
-                content.classList.remove('hidden');
-            }, 1000);
-        })
-    </script>
 @endsection

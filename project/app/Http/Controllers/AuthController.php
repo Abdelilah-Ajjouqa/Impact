@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -32,7 +33,8 @@ class AuthController extends Controller
             Auth::login($user);
             return redirect()->route('posts.index');
         } catch (Exception $e) {
-            return back()->withErrors(['register_error' => 'Something went wrong: ' . $e->getMessage()]);
+            Log::error('Registration error: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['register_error' => 'Registration failed. Please try again.']);
         }
     }
 

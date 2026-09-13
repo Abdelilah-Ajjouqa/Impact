@@ -27,7 +27,7 @@
                     </div>
                     <div>
                         <h3 class="text-gray-500 text-sm">Total posts</h3>
-                        <p class="text-2xl font-semibold">{{ \App\Models\Posts::count() }}</p>
+                        <p class="text-2xl font-semibold">{{ \App\Models\Post::count() }}</p>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                     </div>
                     <div>
                         <h3 class="text-gray-500 text-sm">Total Comments</h3>
-                        <p class="text-2xl font-semibold">{{ \App\Models\Comments::count() }}</p>
+                        <p class="text-2xl font-semibold">{{ \App\Models\Comment::count() }}</p>
                     </div>
                 </div>
             </div>

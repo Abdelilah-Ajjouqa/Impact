@@ -21,7 +21,7 @@ class Album extends Model
 
     public function posts()
     {
-        return $this->belongsToMany(Posts::class, 'album_post', 'album_id', 'post_id')
+        return $this->belongsToMany(Post::class, 'album_post', 'album_id', 'post_id')
             ->withTimestamps();
     }
 }

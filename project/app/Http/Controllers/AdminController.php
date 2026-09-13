@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comments;
-use App\Models\Posts;
+use App\Models\Comment;
+use App\Models\Post;
 use App\Models\User;
 use App\Models\Activity;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -22,7 +23,8 @@ class AdminController extends Controller
             $activities = Activity::with('user')->latest()->take(10)->get();
             return view('admin.dashboard', compact('user', 'activities'));
         } catch (Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            Log::error('Admin dashboard error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Unable to load dashboard.');
         }
     }
 
@@ -33,7 +35,8 @@ class AdminController extends Controller
 
             return view('admin.users.active', compact('users'));
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error fetching active users: ' . $e->getMessage());
+            Log::error('Admin getAllActiveUsers error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error fetching active users.');
         }
     }
 
@@ -44,7 +47,8 @@ class AdminController extends Controller
 
             return view('admin.users.inactive', compact('users'));
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error fetching inactive users: ' . $e->getMessage());
+            Log::error('Admin getAllInactiveUsers error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error fetching inactive users.');
         }
     }
 
@@ -57,7 +61,8 @@ class AdminController extends Controller
 
             return redirect()->back()->with('success', 'User activated successfully.');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error activating user: ' . $e->getMessage());
+            Log::error('Admin activateUser error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error activating user.');
         }
     }
 
@@ -70,63 +75,67 @@ class AdminController extends Controller
 
             return redirect()->back()->with('success', 'User deactivated successfully.');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error deactivating user: ' . $e->getMessage());
+            Log::error('Admin deactivateUser error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error deactivating user.');
         }
     }
 
     public function archivePost($id)
     {
         try {
-            $post = Posts::findOrFail($id);
-            $post->status = Posts::is_archived;
+            $post = Post::findOrFail($id);
+            $post->status = Post::STATUS_ARCHIVED;
             $post->save();
 
             return redirect()
                 ->route('posts.index')
                 ->with('success', 'Post has been archived successfully and is now only visible to administrators.');
         } catch (Exception $e) {
+            Log::error('Admin archivePost error: ' . $e->getMessage());
             return redirect()
                 ->back()
-                ->with('error', 'Error archiving post: ' . $e->getMessage());
+                ->with('error', 'Error archiving post.');
         }
     }
 
     public function getAllArchivePosts()
     {
         try {
-            $posts = Posts::where('status', Posts::is_archived)->get();
+            $posts = Post::where('status', Post::STATUS_ARCHIVED)->get();
 
             return view('admin.posts.archived', compact('posts'));
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error fetching archived posts: ' . $e->getMessage());
+            Log::error('Admin getAllArchivePosts error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error fetching archived posts.');
         }
     }
 
     public function restorePost($id)
     {
         try {
-            $post = Posts::findOrFail($id);
-            if ($post->status !== Posts::is_archived) {
+            $post = Post::findOrFail($id);
+            if ($post->status !== Post::STATUS_ARCHIVED) {
                 return redirect()->back()->with('error', 'Post is not archived.');
             }
 
-            $post->status = Posts::is_public;
+            $post->status = Post::STATUS_PUBLIC;
             $post->save();
 
             return redirect()->back()->with('success', 'Post restored successfully.');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error restoring post: ' . $e->getMessage());
+            Log::error('Admin restorePost error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error restoring post.');
         }
     }
 
     public function deletePost($id)
     {
         try {
-            $post = Posts::findOrFail($id);
+            $post = Post::findOrFail($id);
             $user = Auth::user();
 
             if ($user->role == 'admin') {
-                if ($post->status !== Posts::is_archived) {
+                if ($post->status !== Post::STATUS_ARCHIVED) {
                     return redirect()->back()->with('error', 'Admin can only delete archived posts.');
                 }
             } else if ($post->user_id !== $user->id) {
@@ -136,14 +145,15 @@ class AdminController extends Controller
             $post->delete();
             return redirect()->back()->with('success', 'Post deleted successfully.');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error deleting post: ' . $e->getMessage());
+            Log::error('Admin deletePost error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error deleting post.');
         }
     }
 
     public function deleteComment($id)
     {
         try {
-            $comment = Comments::findOrFail($id);
+            $comment = Comment::findOrFail($id);
             $user = Auth::user();
 
             if ($user->role !== 'admin') {
@@ -153,7 +163,8 @@ class AdminController extends Controller
             $comment->delete();
             return redirect()->back()->with('success', 'Comment deleted successfully.');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error deleting comment: ' . $e->getMessage());
+            Log::error('Admin deleteComment error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error deleting comment.');
         }
     }
 }

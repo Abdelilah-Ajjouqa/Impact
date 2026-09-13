@@ -55,12 +55,12 @@ class User extends Authenticatable
 
     public function posts()
     {
-        return $this->hasMany(Posts::class);
+        return $this->hasMany(Post::class);
     }
 
     public function comments()
     {
-        return $this->hasMany(Comments::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function getRole(string $role)
@@ -68,12 +68,46 @@ class User extends Authenticatable
         return $this->role === $role;
     }
 
-    public function savedPosts(){
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function savedPosts()
+    {
         return $this->hasMany(SavedPost::class);
     }
-    
+
     public function albums()
     {
         return $this->hasMany(Album::class);
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if (!$this->avatar) {
+            return 'https://placehold.co/150';
+        }
+        if (str_starts_with($this->avatar, 'http')) {
+            return $this->avatar;
+        }
+        if (str_starts_with($this->avatar, '/storage/')) {
+            return asset(ltrim($this->avatar, '/'));
+        }
+        return asset('storage/' . $this->avatar);
+    }
+
+    public function getCoverUrlAttribute(): ?string
+    {
+        if (!$this->cover) {
+            return null;
+        }
+        if (str_starts_with($this->cover, 'http')) {
+            return $this->cover;
+        }
+        if (str_starts_with($this->cover, '/storage/')) {
+            return asset(ltrim($this->cover, '/'));
+        }
+        return asset('storage/' . $this->cover);
     }
 }
