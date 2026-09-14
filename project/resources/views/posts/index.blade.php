@@ -30,7 +30,10 @@
                                         </video>
                                     @else
                                         <img src="{{ $media->url }}"
-                                            alt="{{ $item->title }}" class="w-full object-cover">
+                                            alt="{{ $item->title }}"
+                                            loading="lazy"
+                                            decoding="async"
+                                            class="w-full object-cover">
                                     @endif
                                 @else
                                     <div class="w-full h-48 bg-gray-200 flex items-center justify-center">

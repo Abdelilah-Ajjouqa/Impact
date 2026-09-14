@@ -5,9 +5,11 @@ services:
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
+      - ./docker/php/opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
     ports:
       - "8000:8000"
     command: php artisan serve --host=0.0.0.0 --port=8000
+    restart: unless-stopped
     depends_on:
       - mysql
     env_file:

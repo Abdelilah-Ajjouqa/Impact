@@ -94,6 +94,7 @@
                                     </video>
                                 @else
                                     <img src="{{ $media->url }}" alt="{{ $item->title }}"
+                                        loading="lazy" decoding="async"
                                         class="w-full object-cover">
                                 @endif
                             @else
@@ -145,6 +146,7 @@
                                     </video>
                                 @else
                                     <img src="{{ $media->url }}" alt="{{ $savedPost->post->title }}"
+                                        loading="lazy" decoding="async"
                                         class="w-full object-cover">
                                 @endif
                             @else
