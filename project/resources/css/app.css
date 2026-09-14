@@ -117,3 +117,61 @@
     color: #991b1b;
 }
 
+/* Micro-interaction: Double-Tap Heart Burst Animation */
+@keyframes heartBurstAnim {
+    0% {
+        transform: scale(0) rotate(-15deg);
+        opacity: 0;
+    }
+    35% {
+        transform: scale(1.35) rotate(6deg);
+        opacity: 0.95;
+    }
+    60% {
+        transform: scale(0.95) rotate(-3deg);
+        opacity: 1;
+    }
+    80% {
+        transform: scale(1.05) translateY(-15px) rotate(0deg);
+        opacity: 0.85;
+    }
+    100% {
+        transform: scale(0.5) translateY(-50px);
+        opacity: 0;
+    }
+}
+
+.heart-burst.animate-burst {
+    animation: heartBurstAnim 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Micro-interaction: Heart Pulse on click */
+@keyframes heartPulse {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.35); }
+    60% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+
+.heart-pulse {
+    display: inline-block;
+    animation: heartPulse 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Card entry animation for infinite scroll loads */
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-enter {
+    animation: cardFadeIn 0.4s ease-out forwards;
+}
+
+

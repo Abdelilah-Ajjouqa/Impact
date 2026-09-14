@@ -15,16 +15,25 @@ use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::with(['mediaContent', 'tags', 'user'])
+        $posts = Post::with(['mediaContent', 'tags', 'user', 'likes'])
+            ->withCount('likes')
             ->where('status', Post::STATUS_PUBLIC)
             ->latest()
-            ->paginate(15);
+            ->paginate(12);
 
         $savedPostIds = Auth::check()
             ? Auth::user()->savedPosts()->pluck('post_id')->flip()
             : collect();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'html' => view('posts.partials.feed-card', compact('posts', 'savedPostIds'))->render(),
+                'hasMorePages' => $posts->hasMorePages(),
+                'nextPageUrl' => $posts->nextPageUrl(),
+            ]);
+        }
 
         return view('posts.index', compact('posts', 'savedPostIds'));
     }
@@ -89,11 +98,12 @@ class PostController extends Controller
         $post = Post::with([
             'mediaContent',
             'tags',
+            'likes',
             'user' => function ($query) {
                 $query->withCount('followers');
             },
             'comments.user'
-        ])->findOrFail($id);
+        ])->withCount('likes')->findOrFail($id);
         Gate::authorize('view', $post);
 
         $relatedPosts = Post::whereHas('tags', function ($query) use ($post) {
@@ -101,7 +111,8 @@ class PostController extends Controller
         })
             ->where('id', '!=', $post->id)
             ->where('status', Post::STATUS_PUBLIC)
-            ->with(['mediaContent', 'user', 'tags'])
+            ->with(['mediaContent', 'user', 'tags', 'likes'])
+            ->withCount('likes')
             ->inRandomOrder()
             ->take(6)
             ->get();

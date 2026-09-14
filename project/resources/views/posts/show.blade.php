@@ -6,7 +6,7 @@
     <div class="bg-white rounded-xl shadow-lg overflow-hidden max-w-6xl mx-auto">
         <div class="flex flex-col md:flex-row">
             <!-- Left side - Media Gallery Component -->
-            <x-post.media-gallery :mediaContent="$post->mediaContent" />
+            <x-post.media-gallery :mediaContent="$post->mediaContent" :post="$post" />
 
             <!-- Right side - Content -->
             <div class="md:w-2/5 px-5 overflow-y-scroll overflow-x-hidden">
@@ -32,6 +32,9 @@
     @auth
         <x-post.add-to-album-modal :post="$post" />
     @endauth
+
+    <!-- Quick Share Modal -->
+    @include('components.post.share-modal')
 @endsection
 
 @section('scripts')
