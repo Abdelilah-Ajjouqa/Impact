@@ -107,3 +107,28 @@ test('non-author cannot delete another users post', function () {
     $response->assertStatus(403);
 });
 
+test('posts feed returns json payload when requested via ajax for infinite scroll', function () {
+    Post::factory()->count(5)->create(['status' => Post::STATUS_PUBLIC]);
+
+    $response = $this->getJson('/');
+
+    $response->assertStatus(200)
+        ->assertJsonStructure([
+            'html',
+            'hasMorePages',
+            'nextPageUrl'
+        ]);
+});
+
+test('post show page displays like count correctly', function () {
+    $user = User::factory()->create();
+    $post = Post::factory()->create(['status' => Post::STATUS_PUBLIC]);
+    \App\Models\Like::create(['user_id' => $user->id, 'post_id' => $post->id]);
+
+    $response = $this->get("/posts/{$post->id}");
+
+    $response->assertStatus(200);
+    $response->assertSee('1');
+});
+
+

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Album;
 use App\Models\Comment;
+use App\Models\Like;
 use App\Models\Media;
 use App\Models\Post;
 use App\Models\SavedPost;
@@ -236,6 +237,17 @@ class DatabaseSeeder extends Seeder
             );
 
             $album->posts()->syncWithoutDetaching([$createdPosts[0]->id, $createdPosts[1]->id]);
+        }
+
+        // 9. Likes System (Social Engagement)
+        foreach ($createdPosts as $post) {
+            $likers = $allUsers->shuffle()->take(rand(1, min(4, $allUsers->count())));
+            foreach ($likers as $liker) {
+                Like::firstOrCreate([
+                    'user_id' => $liker->id,
+                    'post_id' => $post->id,
+                ]);
+            }
         }
     }
 }
