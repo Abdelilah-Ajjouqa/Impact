@@ -5,6 +5,7 @@ use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SavedPostController;
 use App\Http\Controllers\SearchController;
@@ -53,6 +54,7 @@ Route::middleware(['auth', 'userStatus'])->prefix('users')->name('users.')->grou
 Route::middleware(['auth', 'userStatus'])->prefix('posts')->group(function () {
     Route::get('/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('', [PostController::class, 'store'])->name('posts.store');
+    Route::post('/{id}/like', [LikeController::class, 'toggle'])->name('posts.like');
     // Comment routes
     Route::post('/{post_id}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::put('/{post_id}/comments/{comment_id}', [CommentController::class, 'update'])->name('comments.update');

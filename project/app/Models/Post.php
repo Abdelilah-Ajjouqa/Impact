@@ -58,5 +58,23 @@ class Post extends Model
         return $this->belongsToMany(Album::class, 'album_post', 'post_id', 'album_id')
             ->withTimestamps();
     }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'post_id');
+    }
+
+    public function isLikedBy(?User $user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+
+        if ($this->relationLoaded('likes')) {
+            return $this->likes->contains('user_id', $user->id);
+        }
+
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
 }
 

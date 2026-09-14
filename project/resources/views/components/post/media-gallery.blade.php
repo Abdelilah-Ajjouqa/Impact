@@ -1,6 +1,12 @@
-@props(['mediaContent'])
+@props(['mediaContent', 'post' => null])
 
-<div class="md:w-3/5 bg-black flex flex-col relative">
+<div class="md:w-3/5 bg-black flex flex-col relative {{ $post ? 'double-tap-container select-none cursor-pointer' : '' }}" {{ $post ? 'data-post-id=' . $post->id : '' }}>
+    @if ($post)
+        <!-- Double-Tap Heart Burst Overlay Animation -->
+        <div class="heart-burst absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 z-30">
+            <i class="fas fa-heart text-red-500 text-7xl drop-shadow-[0_10px_25px_rgba(239,68,68,0.6)]"></i>
+        </div>
+    @endif
     <div class="flex-grow flex items-center justify-center">
         @if ($mediaContent->isNotEmpty())
             @foreach ($mediaContent as $index => $media)

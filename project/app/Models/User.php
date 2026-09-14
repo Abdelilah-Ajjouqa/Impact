@@ -83,6 +83,11 @@ class User extends Authenticatable
         return $this->hasMany(Album::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
     public function followers()
     {
         return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id')->withTimestamps();
