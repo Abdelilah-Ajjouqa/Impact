@@ -12,6 +12,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +21,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $avatarPath = storage_path('app/public/avatars');
+        $coverPath = storage_path('app/public/covers');
+        $mediaPath = storage_path('app/public/media');
+
+        // Helper to list filenames in a public storage folder
+        $getFiles = function ($dir) {
+            if (!File::isDirectory($dir)) {
+                return [];
+            }
+            return collect(File::files($dir))
+                ->map(fn($f) => $f->getFilename())
+                ->filter(fn($f) => !str_starts_with($f, '.'))
+                ->values()
+                ->all();
+        };
+
+        $avatarFiles = $getFiles($avatarPath);
+        $coverFiles = $getFiles($coverPath);
+        $mediaFiles = $getFiles($mediaPath);
+
+        $getAvatar = fn($idx) => !empty($avatarFiles) 
+            ? 'avatars/' . $avatarFiles[$idx % count($avatarFiles)] 
+            : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80';
+
+        $getCover = fn($idx) => !empty($coverFiles) 
+            ? 'covers/' . $coverFiles[$idx % count($coverFiles)] 
+            : null;
+
+        $defaultPassword = Hash::make('Password123456!');
+
         // 1. Admin User
         $admin = User::firstOrCreate(
             ['email' => 'admin@impact.test'],
@@ -27,71 +58,54 @@ class DatabaseSeeder extends Seeder
                 'first_name' => 'Admin',
                 'last_name' => 'Impact',
                 'username' => 'admin',
-                'password' => Hash::make('password'),
+                'password' => $defaultPassword,
                 'role' => 'admin',
                 'is_active' => true,
-                'avatar' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+                'avatar' => $getAvatar(0),
+                'cover' => $getCover(0),
             ]
         );
 
-        // 2. Demo User for evaluation / reviewer login
+        // 2. Demo User
         $demoUser = User::firstOrCreate(
             ['email' => 'demo@impact.test'],
             [
-                'first_name' => 'Demo',
-                'last_name' => 'Creator',
+                'first_name' => 'Alex',
+                'last_name' => 'Rivera',
                 'username' => 'demouser',
-                'password' => Hash::make('password'),
+                'password' => $defaultPassword,
                 'role' => 'user',
                 'is_active' => true,
-                'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+                'avatar' => $getAvatar(1),
+                'cover' => $getCover(1),
             ]
         );
 
         // 3. Creator Community Users
         $creatorsData = [
-            [
-                'first_name' => 'Elena',
-                'last_name' => 'Rostova',
-                'username' => 'elena_art',
-                'email' => 'elena@impact.test',
-                'avatar' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80',
-            ],
-            [
-                'first_name' => 'Marcus',
-                'last_name' => 'Chen',
-                'username' => 'marcus_design',
-                'email' => 'marcus@impact.test',
-                'avatar' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
-            ],
-            [
-                'first_name' => 'Sarah',
-                'last_name' => 'Jenkins',
-                'username' => 'sarah_clicks',
-                'email' => 'sarah@impact.test',
-                'avatar' => 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&auto=format&fit=crop&q=80',
-            ],
-            [
-                'first_name' => 'Liam',
-                'last_name' => 'O\'Connor',
-                'username' => 'liam_visuals',
-                'email' => 'liam@impact.test',
-                'avatar' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80',
-            ],
+            ['first_name' => 'Elena', 'last_name' => 'Rostova', 'username' => 'elena_art', 'email' => 'elena@impact.test'],
+            ['first_name' => 'Marcus', 'last_name' => 'Chen', 'username' => 'marcus_design', 'email' => 'marcus@impact.test'],
+            ['first_name' => 'Sarah', 'last_name' => 'Jenkins', 'username' => 'sarah_clicks', 'email' => 'sarah@impact.test'],
+            ['first_name' => 'Liam', 'last_name' => "O'Connor", 'username' => 'liam_visuals', 'email' => 'liam@impact.test'],
+            ['first_name' => 'Yasmine', 'last_name' => 'Alami', 'username' => 'yasmine_studio', 'email' => 'yasmine@impact.test'],
+            ['first_name' => 'Karim', 'last_name' => 'Benali', 'username' => 'karim_motion', 'email' => 'karim@impact.test'],
+            ['first_name' => 'Sofia', 'last_name' => 'Rossi', 'username' => 'sofia_lens', 'email' => 'sofia@impact.test'],
+            ['first_name' => 'David', 'last_name' => 'Miller', 'username' => 'david_craft', 'email' => 'david@impact.test'],
         ];
 
         $creators = collect();
-        foreach ($creatorsData as $data) {
+        foreach ($creatorsData as $idx => $data) {
             $user = User::firstOrCreate(
                 ['email' => $data['email']],
                 [
                     'first_name' => $data['first_name'],
                     'last_name' => $data['last_name'],
                     'username' => $data['username'],
-                    'password' => Hash::make('password'),
+                    'password' => $defaultPassword,
                     'role' => 'user',
                     'is_active' => true,
-                    'avatar' => $data['avatar'],
+                    'avatar' => $getAvatar($idx + 2),
+                    'cover' => $getCover($idx + 2),
                 ]
             );
             $creators->push($user);
@@ -102,152 +116,134 @@ class DatabaseSeeder extends Seeder
         // 4. Tags
         $tagNames = [
             'Design', 'Architecture', 'Photography', 'Typography',
-            'Minimalism', 'Nature', 'UI/UX', 'Abstract', 'Travel', 'Art'
+            'Minimalism', 'Nature', 'UI/UX', 'Abstract', 'Travel', 'Art',
+            'Motion', 'Editorial', '3D', 'Aesthetic'
         ];
         $tags = collect();
         foreach ($tagNames as $name) {
             $tags->push(Tag::firstOrCreate(['name' => $name]));
         }
 
-        // 5. Follow Relationships (Social Graph)
-        // Demo user follows 2 creators; 3 creators follow demo user
-        if ($creators->count() >= 3) {
-            $demoUser->following()->syncWithoutDetaching([$creators[0]->id, $creators[1]->id]);
-            $creators[0]->following()->syncWithoutDetaching([$demoUser->id, $creators[2]->id]);
-            $creators[1]->following()->syncWithoutDetaching([$demoUser->id]);
+        // 5. Follow Relationships
+        if ($creators->count() >= 4) {
+            $demoUser->following()->syncWithoutDetaching([$creators[0]->id, $creators[1]->id, $creators[2]->id]);
+            $creators[0]->following()->syncWithoutDetaching([$demoUser->id, $creators[1]->id]);
+            $creators[1]->following()->syncWithoutDetaching([$demoUser->id, $creators[3]->id]);
             $creators[2]->following()->syncWithoutDetaching([$demoUser->id]);
+            $creators[3]->following()->syncWithoutDetaching([$demoUser->id, $creators[0]->id]);
         }
 
-        // 6. Curated Sample Posts with Media
-        $samplePosts = [
-            [
-                'title' => 'Nordic Architecture & Clean Lines',
-                'description' => 'Exploring minimal geometric facades in modern Scandinavian residential architecture.',
-                'image' => 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop&q=80',
-                'tags' => ['Architecture', 'Minimalism', 'Design'],
-            ],
-            [
-                'title' => 'Golden Hour in Kyoto',
-                'description' => 'Atmospheric sunset light passing through bamboo groves and traditional timber shrines.',
-                'image' => 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&auto=format&fit=crop&q=80',
-                'tags' => ['Photography', 'Travel', 'Nature'],
-            ],
-            [
-                'title' => 'Editorial Typography System',
-                'description' => 'Exploring Swiss-style high contrast serif and sans-serif pairings for contemporary magazines.',
-                'image' => 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80',
-                'tags' => ['Typography', 'Design', 'UI/UX'],
-            ],
-            [
-                'title' => 'Abstract Glass & Light Refraction',
-                'description' => 'Macro studio photography exploring fluid prism reflections through textured optical glass.',
-                'image' => 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800&auto=format&fit=crop&q=80',
-                'tags' => ['Abstract', 'Art', 'Photography'],
-            ],
-            [
-                'title' => 'Minimalist Workspace Setup',
-                'description' => 'Oak wood desk, natural ambient lighting, and clutter-free hardware ergonomics.',
-                'image' => 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=800&auto=format&fit=crop&q=80',
-                'tags' => ['Design', 'Minimalism'],
-            ],
-            [
-                'title' => 'Brutalist Concrete Textures',
-                'description' => 'Monolithic forms and weathered board-formed concrete in urban municipal spaces.',
-                'image' => 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80',
-                'tags' => ['Architecture', 'Photography'],
-            ],
-            [
-                'title' => 'Ceramic Glaze Studies',
-                'description' => 'Handcrafted stoneware featuring reactive crackle glazes and earthy volcanic pigments.',
-                'image' => 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&auto=format&fit=crop&q=80',
-                'tags' => ['Art', 'Design'],
-            ],
-            [
-                'title' => 'Misty Alpine Ridge',
-                'description' => 'Early morning fog settling across jagged peaks in the Dolomites at 2,400m altitude.',
-                'image' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&auto=format&fit=crop&q=80',
-                'tags' => ['Nature', 'Travel', 'Photography'],
-            ],
+        // 6. Curated Albums for Users
+        $albumsData = [
+            ['title' => 'Minimal Architecture & Forms', 'description' => 'Clean geometric facades, concrete textures, and structural purity.', 'is_private' => false],
+            ['title' => 'Golden Hour & Street Vibes', 'description' => 'Atmospheric shadows, warm sunset palettes, and urban scenes.', 'is_private' => false],
+            ['title' => 'Editorial Typography & Print', 'description' => 'Swiss-style layouts, bold serif pairings, and magazine spreads.', 'is_private' => false],
+            ['title' => 'Abstract Motion & 3D Loops', 'description' => 'Prismatic refractions, kinetic typography, and fluid dynamics.', 'is_private' => false],
+            ['title' => 'Nordic Living & Warm Spaces', 'description' => 'Interior architecture, oak minimalism, and daylight harmony.', 'is_private' => false],
+        ];
+
+        $createdAlbums = collect();
+        foreach ($albumsData as $idx => $albumInfo) {
+            $owner = $idx === 0 ? $demoUser : $creators[$idx % $creators->count()];
+            $album = Album::firstOrCreate(
+                ['title' => $albumInfo['title'], 'user_id' => $owner->id],
+                [
+                    'description' => $albumInfo['description'],
+                    'cover_image' => $getCover($idx),
+                    'is_private' => $albumInfo['is_private'],
+                ]
+            );
+            $createdAlbums->push($album);
+        }
+
+        // 7. Posts & Media
+        $postTitles = [
+            ['title' => 'Nordic Architecture & Clean Lines', 'desc' => 'Exploring minimal geometric facades in modern Scandinavian residential architecture.', 'tags' => ['Architecture', 'Minimalism', 'Design']],
+            ['title' => 'Golden Hour in Kyoto', 'desc' => 'Atmospheric sunset light passing through bamboo groves and traditional timber shrines.', 'tags' => ['Photography', 'Travel', 'Nature']],
+            ['title' => 'Editorial Typography System', 'desc' => 'Swiss-style high contrast serif and sans-serif pairings for contemporary magazines.', 'tags' => ['Typography', 'Design', 'Editorial']],
+            ['title' => 'Abstract Glass & Light Refraction', 'desc' => 'Macro studio photography exploring fluid prism reflections through textured optical glass.', 'tags' => ['Abstract', 'Art', 'Photography']],
+            ['title' => 'Minimalist Workspace Setup', 'desc' => 'Oak wood desk, natural ambient lighting, and clutter-free hardware ergonomics.', 'tags' => ['Design', 'Minimalism', 'UI/UX']],
+            ['title' => 'Brutalist Concrete Textures', 'desc' => 'Monolithic forms and weathered board-formed concrete in urban municipal spaces.', 'tags' => ['Architecture', 'Photography']],
+            ['title' => 'Ceramic Glaze Studies', 'desc' => 'Handcrafted stoneware featuring reactive crackle glazes and earthy volcanic pigments.', 'tags' => ['Art', 'Design', 'Aesthetic']],
+            ['title' => 'Misty Alpine Ridge', 'desc' => 'Early morning fog settling across jagged peaks in the Dolomites at 2,400m altitude.', 'tags' => ['Nature', 'Travel', 'Photography']],
+            ['title' => 'Kinetic Motion Typography', 'desc' => 'Dynamic variable font animations blending fluid transitions with bold typography.', 'tags' => ['Motion', 'Typography', 'Design']],
+            ['title' => 'Prismatic Fluid Simulation', 'desc' => 'High frame-rate iridescent fluid dynamics in procedural 3D environments.', 'tags' => ['Motion', '3D', 'Abstract']],
+            ['title' => 'Urban Midnight Walk', 'desc' => 'Reflections on wet asphalt under vibrant neon signs and low night fog.', 'tags' => ['Photography', 'Aesthetic', 'Travel']],
+            ['title' => 'Contemporary Editorial Layout', 'desc' => 'Asymmetric grids and expansive whitespace showcasing contemporary fine art.', 'tags' => ['Editorial', 'Design', 'Minimalism']],
         ];
 
         $createdPosts = collect();
-        foreach ($samplePosts as $index => $postData) {
-            $author = $allUsers[$index % $allUsers->count()];
 
-            $post = Post::create([
-                'user_id' => $author->id,
-                'title' => $postData['title'],
-                'description' => $postData['description'],
-                'status' => Post::STATUS_PUBLIC,
-            ]);
+        if (!empty($mediaFiles)) {
+            foreach ($mediaFiles as $idx => $filename) {
+                $author = $allUsers[$idx % $allUsers->count()];
+                $info = $postTitles[$idx % count($postTitles)];
+                $isVideo = str_ends_with(strtolower($filename), '.mp4');
 
-            // Attach Media
-            Media::create([
-                'post_id' => $post->id,
-                'user_id' => $author->id,
-                'path' => $postData['image'],
-                'type' => 'image',
-            ]);
+                $post = Post::create([
+                    'user_id' => $author->id,
+                    'title' => $info['title'] . ($idx >= count($postTitles) ? ' #' . ($idx + 1) : ''),
+                    'description' => $info['desc'],
+                    'status' => Post::STATUS_PUBLIC,
+                ]);
 
-            // Attach Tags
-            $matchingTagIds = $tags->whereIn('name', $postData['tags'])->pluck('id');
-            if ($matchingTagIds->isNotEmpty()) {
-                $post->tags()->sync($matchingTagIds);
+                Media::create([
+                    'post_id' => $post->id,
+                    'user_id' => $author->id,
+                    'path' => 'media/' . $filename,
+                    'type' => $isVideo ? 'video' : 'image',
+                ]);
+
+                $tagIds = $tags->whereIn('name', $info['tags'])->pluck('id');
+                if ($tagIds->isNotEmpty()) {
+                    $post->tags()->sync($tagIds);
+                }
+
+                // Add to corresponding album
+                $targetAlbum = $createdAlbums[$idx % $createdAlbums->count()];
+                $targetAlbum->posts()->syncWithoutDetaching([$post->id]);
+
+                $createdPosts->push($post);
             }
-
-            $createdPosts->push($post);
         }
 
-        // 7. Comments
+        // 8. Comments
         $sampleComments = [
             'Incredible color palette and composition!',
             'The texture and depth in this shot are stunning.',
             'Bookmarking this for my upcoming design project reference.',
             'Love the lighting here. Truly inspiring work!',
+            'The contrast and whitespace balance are exceptional.',
+            'Such clean execution and visual storytelling.',
         ];
 
-        foreach ($createdPosts->take(4) as $post) {
-            $commenter = $allUsers->where('id', '!=', $post->user_id)->random();
-            Comment::create([
-                'user_id' => $commenter->id,
-                'post_id' => $post->id,
-                'content' => $sampleComments[array_rand($sampleComments)],
-            ]);
+        foreach ($createdPosts->take(15) as $post) {
+            $commenters = $allUsers->where('id', '!=', $post->user_id)->random(min(2, $allUsers->count() - 1));
+            foreach ($commenters as $commenter) {
+                Comment::create([
+                    'user_id' => $commenter->id,
+                    'post_id' => $post->id,
+                    'content' => $sampleComments[array_rand($sampleComments)],
+                ]);
+            }
         }
 
-        // 8. Saved Posts & Sample Album for Demo User
-        if ($createdPosts->count() >= 3) {
-            SavedPost::firstOrCreate([
-                'user_id' => $demoUser->id,
-                'post_id' => $createdPosts[0]->id,
-            ]);
-            SavedPost::firstOrCreate([
-                'user_id' => $demoUser->id,
-                'post_id' => $createdPosts[1]->id,
-            ]);
-
-            $album = Album::firstOrCreate(
-                [
-                    'user_id' => $demoUser->id,
-                    'title' => 'Visual Inspiration 2025',
-                ],
-                [
-                    'description' => 'A curated collection of design references and mood board imagery.'
-                ]
-            );
-
-            $album->posts()->syncWithoutDetaching([$createdPosts[0]->id, $createdPosts[1]->id]);
-        }
-
-        // 9. Likes System (Social Engagement)
-        foreach ($createdPosts as $post) {
-            $likers = $allUsers->shuffle()->take(rand(1, min(4, $allUsers->count())));
-            foreach ($likers as $liker) {
+        // 9. Likes & Saved Posts for Demo User
+        foreach ($createdPosts as $idx => $post) {
+            if ($idx % 2 === 0) {
                 Like::firstOrCreate([
-                    'user_id' => $liker->id,
+                    'user_id' => $demoUser->id,
+                    'post_id' => $post->id,
+                ]);
+            }
+            if ($idx % 3 === 0) {
+                SavedPost::firstOrCreate([
+                    'user_id' => $demoUser->id,
                     'post_id' => $post->id,
                 ]);
             }
         }
+
+        $this->command->info('Impact database successfully seeded with ' . $createdPosts->count() . ' posts and local media!');
     }
 }
