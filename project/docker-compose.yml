@@ -10,7 +10,7 @@ services:
       - ./docker/php/opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
     ports:
       - "8000:8000"
-    command: sh -c "if [ ! -d 'vendor' ]; then composer install --no-interaction; fi && php -S 0.0.0.0:8000 -t public public/index.php"
+    command: sh -c "if [ ! -d 'vendor' ]; then composer install --no-interaction; fi && php -S 0.0.0.0:8000 -t public server.php"
     restart: unless-stopped
     depends_on:
       - mysql
